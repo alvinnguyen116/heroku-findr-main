@@ -16,7 +16,7 @@ function StepFour({values, setValues}) {
     // COMPONENT STATE -------------------------------------------------------------------------------------------------
 
     const [inputValue, setInputValue] = useState('');
-    const [onAdd, onDelete] = useChips({values, setValues});
+    const [onAdd, onDelete] = useChips({values, setValues, setInputValue});
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 

@@ -31,10 +31,11 @@ function useInput(validator = () => true) {
 /**
  * @param values {[]}
  * @param setValues {function}
+ * @param setInputValue {function}
  * @desc Supplies an onAdd and onDelete
  * handlers functions for an array of values.
  */
-function useChips({values,setValues}) {
+function useChips({values,setValues, setInputValue = () => {}}) {
     const onDelete = valueToDelete => {
         const newValues = [...values];
         const deleteIndex = newValues.findIndex(value => valueToDelete === value);
@@ -43,7 +44,10 @@ function useChips({values,setValues}) {
             setValues(newValues);
         }
     };
-    const onAdd = valueToAdd => setValues([...values, valueToAdd]);
+    const onAdd = valueToAdd => {
+        setInputValue('');
+        setValues([...values, valueToAdd]);
+    };
     return [onAdd, onDelete];
 }
 

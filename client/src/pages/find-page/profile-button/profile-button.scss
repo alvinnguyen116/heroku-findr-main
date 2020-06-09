@@ -6,6 +6,7 @@
 
   .profile-container {
     display: flex;
+    box-sizing: border-box;
     background-color: var(--bg-color);
     padding: .5em;
     --border-radius: 4px;

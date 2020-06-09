@@ -37,10 +37,10 @@ function App({appState, profileState, dispatch}) {
 
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
-    const {snackbar, route, accessToken, backdropElement, searchTag, startSearch} = appState;
+    const {snackbar, route, accessToken, backdropElement} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
-    const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true";
-    const defaultRoute = (loggedIn) ? (profileCompleted ? ROUTES.FIND_PEOPLE : ROUTES.NEXT_STEPS) : ROUTES.REGISTER;
+    const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true" && accessToken;
+    const defaultRoute = loggedIn ? (profileCompleted ? ROUTES.FIND_PEOPLE : ROUTES.NEXT_STEPS) : ROUTES.REGISTER;
 
 
     // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ function App({appState, profileState, dispatch}) {
     useEffect(() => {
         setComponentDidMount(true);
         const done = () => dispatch(setPreloadDone(true));
-        if (!accessToken && loggedIn) {
+        if (!loggedIn) {
             const successCallback = () => dispatch(getProfile(done));
             dispatch(fetchNewToken({successCallback, failureCallback: done}));
         }
