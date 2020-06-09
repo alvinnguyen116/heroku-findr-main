@@ -3,7 +3,6 @@ import {Router} from 'express';
 import {StaticRouter} from "react-router-dom";
 import ReactDOMServer from "react-dom/server";
 import {AppProvider} from "../client/src/utils";
-import { ServerStyleSheets } from '@material-ui/styles';
 import App from "../client/src/components/app/App";
 import {sendFullPage} from "../util";
 

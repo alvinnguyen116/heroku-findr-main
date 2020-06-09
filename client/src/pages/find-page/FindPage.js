@@ -84,6 +84,10 @@ function FindPage({appState, profileState, dispatch}) {
         }
     }, [preloadDone, profileCompleted]);
 
+    /**
+     * @desc Whenever the menu is resized,
+     * change the menu style.
+     */
     useEffect(() => {
         if (menuOpen) {
             setButtonStyle(MENU_STYLE.OPEN);
@@ -91,6 +95,15 @@ function FindPage({appState, profileState, dispatch}) {
             setButtonStyle(MENU_STYLE.CLOSED);
         }
     }, [menuOpen]);
+
+    /**
+     * @desc Whenever the current index changes,
+     * scroll the selected element if needed.
+     */
+    useEffect(() => {
+        const selected = document.querySelector('.profile-button.selected');
+        selected && selected.scrollIntoViewIfNeeded();
+    }, [currentIndex]);
 
     /**
      * @desc Key board shortcuts

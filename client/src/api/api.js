@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { GiphyFetch } from '@giphy/js-fetch-api'
 
-const AUTH_URL = {
-    LOCAL: "http://localhost:4000",
-    PROD: "https://findr-auth.herokuapp.com/"
+const URL = {
+    LOCAL: "http://localhost:3000",
+    PROD: "https://findr-main-api.herokuapp.com"
 };
 
 /**
@@ -11,7 +11,7 @@ const AUTH_URL = {
  * for Authentication API.
  */
 const AuthAxios = axios.create({
-    baseURL: process.env.NODE_ENV === "development" ? AUTH_URL.LOCAL : AUTH_URL.PROD,
+    baseURL: process.env.NODE_ENV === "development" ? URL.LOCAL : URL.PROD,
     timeout: 30000,
     withCredentials: true
 });
@@ -49,17 +49,12 @@ export class AuthAPI {
     }
 }
 
-const MAIN_URL = {
-    LOCAL : "http://localhost:3000",
-    PROD : "https://findr-main-api.herokuapp.com/"
-};
-
 /**
  * @desc Pre-configure an axios object
  * for Main API.
  */
 const MainAxios = axios.create({
-    baseURL: process.env.NODE_ENV === "development" ? MAIN_URL.LOCAL : MAIN_URL.PROD,
+    baseURL: process.env.NODE_ENV === "development" ? URL.LOCAL : URL.PROD,
     timeout: 30000,
     withCredentials: true
 });

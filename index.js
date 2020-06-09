@@ -10,9 +10,9 @@ import {passport} from './middleware/passport';
 import UserProfileRouter from './route/UserProfile';
 import ClientRouter from './route/Client';
 import setUpImageRoutes from "./route/Image";
+import AuthRouter from './route/Auth';
+import createLoginRouter from './route/Login';
 import {BUCKET} from './util/enums';
-
-//todo: server side react
 
 // CONSTANTS -----------------------------------------------------------------------------------------------------------
 
@@ -39,6 +39,8 @@ app.use(express.urlencoded({
 }));
 app.use(passport.initialize());
 app.use('/profile', UserProfileRouter);
+app.use('/login', createLoginRouter(passport));
+app.use(AuthRouter);
 
 // DATABASE ------------------------------------------------------------------------------------------------------------
 

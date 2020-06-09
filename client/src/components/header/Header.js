@@ -4,10 +4,10 @@ import {useLocation} from 'react-router-dom';
 import {connect} from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import Search from '../input/search/search';
-import {logout, reroute, setPreloadDone, setSearch} from '../../redux/actions/app';
+import {logout, reroute, setPreloadDone} from '../../redux/actions/app';
 import {emptyProfile} from "../../redux/actions/profile";
 import {ROUTES} from '../../utils/enums';
-import {debouncedProfileSearch, isEmptyProfile, debouncedKeyPress} from "../../utils";
+import {isEmptyProfile, debouncedKeyPress} from "../../utils";
 import './header.scss';
 
 /**
@@ -17,6 +17,8 @@ import './header.scss';
  * @return {null}
  */
 function Header({appState, profileState, dispatch}) {
+
+    //todo: create option to edit profile
 
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 

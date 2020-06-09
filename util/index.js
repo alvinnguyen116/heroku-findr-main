@@ -20,7 +20,7 @@ export function safeCastOptions({limit, offset}) {
     return {limit,skip}
 }
 
-export function sendFullPage({res, componentStream, css}) {
+export function sendFullPage({res, componentStream}) {
     // write start
     const htmlStart = `<!DOCTYPE html>
             <html lang="en" style="background-color: #f0f2f5;">
@@ -44,20 +44,4 @@ export function sendFullPage({res, componentStream, css}) {
         res.write(htmlEnd);
         res.end();
     });
-}
-
-
-export function sendHTML() {
-    return `
-        <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <title>Findr</title>
-                <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&family=Amiri&family=VT323&family=Roboto&family=Roboto+Mono&family=Sacramento&display=swap" rel="stylesheet">
-            </head>
-            <body>
-            <div id="root"></div>
-            <script src="/clientBundle.js"></script>
-            </body>
-            </html>`
 }

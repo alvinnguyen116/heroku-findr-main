@@ -1,5 +1,5 @@
-const {ROLE} = require("./enums");
-const EmailValidator = require("email-validator");
+import {ROLE, TOKENS} from "./enums";
+import EmailValidator from "email-validator";
 
 /**
  * @param email
@@ -14,3 +14,8 @@ export const isValidEmail = email => !!EmailValidator.validate(email);
 
 export const isValidRole = role => Object.values(ROLE).includes(role);
 
+/**
+ * @param token
+ * @desc Whether a token is valid.
+ */
+export const isValidToken = token => Object.values(TOKENS).includes(token);

@@ -7,6 +7,7 @@ function ProfileButton({className = '', profilePicture = {file: ''},
                         tags = [], onClick = () => {},
                         style={description: {}, container: {}}, showDefault=false}) {
 
+
     // COMPONENT STATE -------------------------------------------------------------------------------------------------
 
     const [ref, imgLoaded] = useVirtualScroll(profilePicture.file);
@@ -19,7 +20,7 @@ function ProfileButton({className = '', profilePicture = {file: ''},
     if (!showDefault && imgLoaded) profileIconStyle['backgroundImage'] = `url(${profilePicture.file})`;
     if (showDefault) className += ' default loading-bg';
     return (
-        <div className={`profile-button`} ref={ref} onClick={onClick} style={style.container}>
+        <div className={`profile-button ${className}`} ref={ref} onClick={onClick} style={style.container}>
             <div className={`profile-container ${className}`}>
                 <div className={"profile-icon image-icon"} style={profileIconStyle}/>
                 <div className={"description"} style={style.description}>
