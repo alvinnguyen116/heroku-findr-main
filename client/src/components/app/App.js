@@ -127,12 +127,12 @@ function App({appState, profileState, dispatch}) {
                         <PrivateRoute path={ROUTES.NEXT_STEPS}>
                             <NextStepsPage/>
                         </PrivateRoute>
-                        <PublicRoute path={ROUTES.LOGIN}>
+                        <Route path={ROUTES.LOGIN}>
                             <LoginPage dispatch={dispatch}/>
-                        </PublicRoute>
-                        <PublicRoute path={ROUTES.REGISTER}>
+                        </Route>
+                        <Route path={ROUTES.REGISTER}>
                             <RegisterPage/>
-                        </PublicRoute>
+                        </Route>
                         <Route render={() => <Redirect to={defaultRoute}/>}/>
                     </Switch>
                 </main>
