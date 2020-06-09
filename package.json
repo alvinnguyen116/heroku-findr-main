@@ -6,7 +6,7 @@
     "start": "node ./dist/server.js",
     "build": "rm -rf dist && webpack",
     "dev": "yarn build && concurrently \"yarn start\" \"cd ../authentication && yarn start\"",
-    "heroku-postbuild": "npm install && npm run build && npm run start"
+    "heroku-postbuild": "npm install && npm run build"
   },
   "engines": {
     "node": "14.4.0"
