@@ -1,0 +1,73 @@
+.register-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: fit-content;
+  align-self: center;
+  padding: 3em 3em 0 3em;
+  border-radius: 1em !important;
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    > *:not(:last-child) {
+      margin-bottom: 1em;
+    }
+
+    .link-and-button {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 0 2em 0;
+
+      .login-redirect {
+        margin-right: 2em;
+      }
+
+      .button {
+        width: fit-content;
+        justify-self: end;
+      }
+
+      button.button {
+        color: white;
+      }
+    }
+  }
+
+  .validations {
+
+    h1 {
+      width: 100%;
+      font-weight: 400;
+    }
+
+    ul {
+      list-style-type: disc;
+
+      li {
+        display: flex;
+        font-size: 12px;
+        align-items: center;
+        font-weight: normal;
+
+        .done {
+          color: green;
+        }
+
+        .cancel {
+          color: red;
+        }
+
+        span {
+          margin-bottom: 1.5px;
+        }
+        svg {
+          margin-right: 6px;
+          font-size: 1.5em;
+        }
+      }
+    }
+  }
+}

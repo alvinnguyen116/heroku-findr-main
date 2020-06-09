@@ -1,0 +1,82 @@
+.step-seven {
+  display: flex;
+  flex-direction: column;
+
+  .color-picker {
+    align-self: center;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    max-width: 80%;
+    padding: 1em 0 .5em;
+    background-color: var(--default-color);
+    border-radius: 4px;
+
+    .theme {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+
+
+      &.light {
+        justify-content: flex-end;
+      }
+
+      &.dark {
+        justify-content: flex-start;
+      }
+    }
+
+    .light-or-dark {
+      --length: 48px;
+      width: var(--length);
+      height: var(--length);
+      box-sizing: border-box;
+      border-radius: 8px;
+      margin-right: .5em;
+      margin-bottom: .5em;
+      padding: 8px;
+      position: relative;
+
+      &.light {
+        background-color: black;
+
+        .done {
+          color: green;
+        }
+      }
+
+      &.dark {
+        background-color: white;
+
+        .done {
+          color: lightgreen;
+        }
+      }
+
+      .done {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+      }
+
+      .theme-option {
+        --size: 2em;
+        width: var(--size);
+        height: var(--size);
+        border-radius: 50%;
+        transition: transform .1s linear, border-radius .1s linear;
+      }
+
+      &:hover {
+        cursor: pointer;
+
+        .theme-option {
+          transform: scale(1.1);
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+}

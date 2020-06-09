@@ -1,0 +1,11 @@
+.profile-page {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--header-height);
+
+  .profile-component {
+    margin-bottom: 100px;
+  }
+}

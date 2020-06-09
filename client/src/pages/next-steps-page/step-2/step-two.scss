@@ -1,0 +1,58 @@
+@import '../../../utils/mixins';
+
+.step-two {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .name {
+    text-transform: capitalize;
+  }
+
+  .step-two-a {
+    --img-len: 125px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: var(--img-len);
+
+    .input-upload {
+      .upload-button {
+        display: flex;
+        width: fit-content;
+
+        svg {
+          margin-right: 12px;
+        }
+      }
+    }
+
+    .preview-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+
+      .image-preview {
+        border-radius: 50%;
+        padding: 0;
+
+        img {
+          height: var(--img-len);
+          width: var(--img-len);
+        }
+      }
+    }
+  }
+}
+
+.react-crop {
+  max-height: 90vh;
+  max-width: 90vw;
+  z-index: 20;
+
+  img {
+    max-width: 100%;
+    max-height: 100vh;
+  }
+}
+

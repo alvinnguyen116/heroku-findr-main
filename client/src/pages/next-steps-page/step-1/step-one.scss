@@ -1,0 +1,13 @@
+@import '../../../utils/mixins';
+
+.step-one {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 3em;
+  }
+}

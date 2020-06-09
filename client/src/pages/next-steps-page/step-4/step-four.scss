@@ -1,0 +1,14 @@
+.step-five {
+
+  .tags-search {
+
+      .MuiChip-label {
+        overflow: visible;
+        font-style: italic;
+
+        &::before {
+          content: "#";
+        }
+      }
+  }
+}

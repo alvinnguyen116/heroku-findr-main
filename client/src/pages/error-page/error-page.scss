@@ -1,0 +1,29 @@
+.error-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: opacity .5s linear .5s forwards;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--bg-color);
+  z-index: 999999;
+
+  .spinner {
+    position: absolute;
+    top: calc(50% - 50px);
+    left: calc(50% - 50px);
+  }
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

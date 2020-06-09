@@ -1,0 +1,60 @@
+.next-steps-page {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1em;
+  padding: 1em;
+  height: 100vh;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    border-radius: 1em !important;
+    overflow: hidden;
+
+    .progress {
+      margin-bottom: 1em;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        color: white;
+      }
+    }
+
+    .steps-title {
+      font-size: 1.5em;
+      font-weight: 100;
+      margin: 25px 0;
+      line-height: 1.5em;
+
+      em {
+        color: #e91e63;
+      }
+    }
+
+    .current-step {
+      padding: 0 1em 1em;
+      flex-grow: 1;
+    }
+  }
+
+  .profile-preview {
+    font-size: 12px;
+
+    &.profile {
+      overflow-y: scroll;
+      overflow-x: hidden;
+
+      .catchphrase {
+        padding: 1em;
+      }
+    }
+  }
+}

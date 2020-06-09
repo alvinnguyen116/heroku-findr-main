@@ -1,0 +1,302 @@
+@import '../../utils/mixins';
+
+html {
+  --header-height: 59px;
+  --bg-color: #f0f2f5;
+  --default-color: #e0e0e0;
+  --hover-gray: #dddee0a6;
+  --primary-color: #e91e63;
+  --primary-50: #fce4ec;
+  --primary-100: #f8bbd0;
+  --button-backround-color: #e4e6eb;
+  --left-margin: 25px;
+  --default-text-color: rgba(0,0,0,.1);
+  background-color: var(--bg-color);
+  overflow-wrap: anywhere;
+}
+
+.App {
+  main {
+    min-height: 100vh;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    .welcome-title {
+      text-align: center;
+      font-size: 3em;
+      font-weight: 100;
+      margin-bottom: 1em;
+
+      b {
+        font-weight: 600;
+      }
+    }
+
+    .next-steps-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      border-radius: 4px;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .MuiCard-root {
+      border-radius: 8px;
+    }
+  }
+
+  .link {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    -webkit-text-fill-color: unset;
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+  }
+
+  .MuiBackdrop-root {
+    z-index: 0;
+  }
+}
+
+.backdrop {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.fade-in {
+  @include fadeIn();
+}
+
+.fade-in-enter {
+  opacity: 0;
+}
+.fade-in-enter-done {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+
+.fade-in-exit {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.move-right {
+  right: 50%;
+  position: absolute !important;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: opacity .35s ease-in .35s forwards, moveRight .60s ease-out forwards;
+}
+
+.move-left {
+  left: 50%;
+  position: absolute !important;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: opacity .35s ease-in .35s forwards, moveLeft .60s ease-out forwards;
+}
+
+.amatic {
+  font-family: 'Amatic SC', cursive;
+  font-size: 3em;
+}
+
+.amiri {
+  font-family: 'Amiri', serif;
+  font-size: 2.5em;
+}
+
+.VT323 {
+  font-family: 'VT323', cursive;
+  font-size: 2.75em;
+}
+
+.roboto {
+  font-family: 'Roboto', monospace;
+  font-size: 2.25em;
+}
+
+.roboto_mono {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 2.125em;
+}
+
+.sacramento {
+  font-family: 'Sacramento', cursive;
+  font-size: 3.25em;
+}
+
+.hide-scroll-parent {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+
+  .hide-scroll-child {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: -17px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+}
+
+.custom-scrollbar {
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: unset;
+  }
+
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,.3);
+    }
+  }
+}
+
+.hide-scrollbar {
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: unset;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    width: 0;
+  }
+}
+
+.fade-effect {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    background-size: 1px 7px;
+    height: 7px;
+    background-repeat: repeat-x;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAOBAMAAAD3WtBsAAAAFVBMVEUAAAAAAAAAAAAAAAAAAAAAAAD29va1cB7UAAAAB3RSTlMCCwQHGBAaZf6MKAAAABpJREFUCNdjSGNIY3BhCGUQBEJjIFQCQigAACyJAjLNW4w5AAAAAElFTkSuQmCC);
+  }
+}
+
+.user-profile-picture {
+  box-sizing: border-box;
+  border-radius: 50%;
+  padding: .25em;
+  transition: padding .1s linear;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.image-icon {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+// https://www.gradient-animator.com/
+.loading-bg {
+  background: linear-gradient(0deg, #d2d1d1, #e7e7e8);
+  background-size: 400% 400%;
+
+  -webkit-animation: bgPosition 3s ease infinite;
+  -moz-animation: bgPosition 3s ease infinite;
+  animation: bgPosition 2s ease infinite;
+}
+
+.error-title {
+  font-weight: 100;
+  font-size: 2em;
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes moveLeft {
+  from {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  to {
+    left: 0;
+    transform: translateX(0);
+  }
+}
+
+@keyframes moveRight {
+  from {
+    right: 50%;
+    transform: translateX(-50%);
+  }
+  to {
+    right: 0;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bgPosition {
+  0%{background-position:49% 0%}
+  50%{background-position:52% 100%}
+  100%{background-position:49% 0%}
+}

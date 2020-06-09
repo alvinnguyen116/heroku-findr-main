@@ -1,0 +1,54 @@
+.search {
+  border-radius: 1em;
+  background-color: var(--bg-color);
+  height: 35px;
+  overflow: hidden;
+  flex: none;
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+
+    .search-button {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+
+    input {
+      transform: translateX(-25px);
+    }
+  }
+
+  .MuiOutlinedInput-root {
+    input {
+      transition: transform .2s linear;
+      padding: .5em 1em .5em 0;
+    }
+  }
+
+  fieldset {
+    border: none;
+    border-color: unset !important;
+    border-width: 1px !important;
+  }
+
+  .MuiOutlinedInput-adornedStart {
+    padding-left: 4px;
+  }
+
+  .MuiOutlinedInput-adornedEnd {
+    padding-right: 0;
+  }
+
+  .search-button {
+    opacity: 1;
+    margin-left: 3px;
+    transition: transform .2s linear, opacity .1s ease-out;
+
+    svg {
+      color: #afacac;
+    }
+  }
+}
+
+
