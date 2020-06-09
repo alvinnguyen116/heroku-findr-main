@@ -23,7 +23,7 @@ function Header({appState, profileState, dispatch}) {
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
     const {profilePicture, name} = profileState;
-    const {searchTag, preloadDone} = appState;
+    const {searchTag} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
     const HEADER_ROUTES = [ROUTES.FIND_PEOPLE, ROUTES.MY_PROFILE];
     const IGNORE_KEYS = [37, 38, 39, 40];
@@ -86,7 +86,7 @@ function Header({appState, profileState, dispatch}) {
                 }
             }
         };
-        if (preloadDone && profileCompleted) {
+        if (profileCompleted) {
             return (
                 <div className={"header fade-effect"}>
                     <Search {...searchProps}/>
