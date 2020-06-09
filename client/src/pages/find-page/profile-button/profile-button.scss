@@ -1,14 +1,15 @@
 .profile-button {
   width: 275px;
-  height: calc(50px + 1em);
   overflow: hidden;
   transition: width .2s linear;
+  display: flex;
 
   .profile-container {
     display: flex;
     background-color: var(--bg-color);
     padding: .5em;
     --border-radius: 4px;
+    width: 100%;
     border-radius: var(--border-radius);
 
     .profile-icon {

@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import ChipInput from 'material-ui-chip-input'
 import {useChips} from '../../../utils/hooks';
+import {dispatchError} from "../../../utils";
 import './step-four.scss';
 
 /**
@@ -14,6 +15,7 @@ function StepFour({values, setValues}) {
 
     // COMPONENT STATE -------------------------------------------------------------------------------------------------
 
+    const [inputValue, setInputValue] = useState('');
     const [onAdd, onDelete] = useChips({values, setValues});
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
@@ -23,7 +25,18 @@ function StepFour({values, setValues}) {
         value: values,
         fullWidth: true,
         onAdd,
-        onDelete
+        onDelete,
+        inputValue,
+        onUpdateInput: e => {
+            try {
+                const {value} = e.target;
+                if (typeof value === "string") {
+                    setInputValue(value.replace("#", ''));
+                }
+            } catch (err) {
+                dispatchError(err);
+            }
+        }
     };
 
     return (

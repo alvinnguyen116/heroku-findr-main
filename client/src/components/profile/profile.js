@@ -105,7 +105,7 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
             return (
                 <div className={"catchphrase"}>
                     <div className={`quote ${catchphrase.font}`}>
-                        "{catchphrase.quote}"
+                        {catchphrase.quote}
                     </div>
                 </div>
             );
