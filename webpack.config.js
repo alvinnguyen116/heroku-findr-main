@@ -59,7 +59,7 @@ const serverSass = {
 };
 
 const clientConfig = {
-    mode: "development",
+    mode: "production",
     target: "web",
     entry: {
         "clientBundle.js": path.resolve(__dirname, "client/src/index.js")
@@ -74,7 +74,7 @@ const clientConfig = {
 };
 
 const serverConfig = {
-    mode: "development",
+    mode: "production",
     target: "node",
     node: {
         __dirname: false,
