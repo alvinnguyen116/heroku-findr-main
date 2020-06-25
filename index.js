@@ -17,7 +17,7 @@ import {BUCKET} from './util/enums';
 // CONSTANTS -----------------------------------------------------------------------------------------------------------
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 const ORIGIN = {
     LOCAL: "http://localhost:3000",
     PROD: "https://findr-main-api.herokuapp.com"

@@ -3,52 +3,79 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: .5em;
+  padding: 4px;
   align-items: center;
   display: flex;
+  height: var(--header-height);
+  box-sizing: border-box;
   background-color: white;
   justify-content: space-between;
   z-index: 1;
   border-radius: 0 !important;
 
+  .link {
+    color: black;
+    text-decoration: none;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+
+    .link {
+      width: 43px;
+      height: 43px;
+    }
+  }
+
   .search {
     margin-left: 8px;
     width: 273px;
+    justify-content: center;
+
+    input {
+      font-size: .9rem;
+    }
+  }
+
+  .button {
+    background-color: transparent;
+    transition: background-color .25s linear;
+    border-radius: 4px;
+    display: flex;
+    height: 43px;
+    box-sizing: border-box;
+    align-items: center;
+
+    &:hover, &.hover {
+      cursor: pointer;
+      background-color: var(--button-backround-color);
+    }
   }
 
   .main-button {
     --img-len: 35px;
-    border-radius: 2em;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    background-color: var(--button-backround-color);
-
-    &:hover, &.hover {
-      cursor: pointer;
-
-      .name {
-        margin: 0 1em;
-      }
-    }
+    padding: 4px 12px;
 
     .image-icon{
       height: var(--img-len);
       width: var(--img-len);
-      border-radius: 50%;
+      border-radius: 4px;
       object-fit: contain;
     }
 
     .name {
       margin: 0 .5em;
       text-transform: capitalize;
-      font-weight: bold;
-      padding: 0;
-      transition: margin .25s ease-in-out, padding .75s ease-in-out;
-
-      &.default {
-        padding: 0 25px;
-      }
+      font-weight: normal;
     }
 
     .menu-enter {
@@ -113,3 +140,8 @@
   }
 }
 
+.spacer {
+  height: 30px;
+  width: 1px;
+  background-color: var(--default-text-color);
+}

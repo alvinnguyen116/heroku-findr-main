@@ -1,13 +1,14 @@
 import React, {useEffect, useState, useRef} from 'react';
 import Paper from '@material-ui/core/Paper';
+import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import {useLocation} from 'react-router-dom';
 import {connect} from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import Search from '../input/search/search';
 import {logout, reroute, setPreloadDone} from '../../redux/actions/app';
 import {emptyProfile} from "../../redux/actions/profile";
-import {ROUTES} from '../../utils/enums';
-import {isEmptyProfile, debouncedKeyPress} from "../../utils";
+import {COOKIE, ROUTES} from '../../utils/enums';
+import {isEmptyProfile, debouncedKeyPress, dispatchError, getCookie} from "../../utils";
 import './header.scss';
 
 /**
@@ -23,10 +24,10 @@ function Header({appState, profileState, dispatch}) {
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
     const {profilePicture, name} = profileState;
-    const {searchTag} = appState;
+    const {accessToken, searchTag} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
-    const HEADER_ROUTES = [ROUTES.FIND_PEOPLE, ROUTES.MY_PROFILE];
-    const IGNORE_KEYS = [37, 38, 39, 40];
+    const HEADER_ROUTES = [ROUTES.FIND_PEOPLE, ROUTES.MY_PROFILE, ROUTES.ABOUT];
+    const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true" && accessToken;
     const location = useLocation();
     const showHeader = HEADER_ROUTES.includes(location.pathname);
 
@@ -61,6 +62,15 @@ function Header({appState, profileState, dispatch}) {
         }
     }, [profilePicture.cropped]);
 
+    useEffect(() => {
+        dispatch(setPreloadDone(false));
+        try {
+            debouncedKeyPress(value);
+        } catch (err) {
+            dispatchError(err);
+        }
+    }, [value]);
+
     // HANDLERS --------------------------------------------------------------------------------------------------------
 
     const signOut = () => {
@@ -72,30 +82,37 @@ function Header({appState, profileState, dispatch}) {
         dispatch(reroute(ROUTES.MY_PROFILE));
     };
 
+    const aboutPage = () => {
+        dispatch(reroute(ROUTES.ABOUT));
+    };
+
+    const loginPage = () => {
+        dispatch(reroute(ROUTES.LOGIN));
+    };
+
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
     if (showHeader)  {
         const searchProps = {
-            value,setValue,
+            value, setValue,
             placeholder: 'Search Tags',
             handlers: {
-                onKeyUp: e => {
-                    if (IGNORE_KEYS.includes(e.keyCode)) return;
-                    dispatch(setPreloadDone(false));
-                    debouncedKeyPress(e.target.value);
+                onKeyPress: e => {
+                    if (e.key === "Enter") {
+                        dispatch(reroute(ROUTES.FIND_PEOPLE));
+                    }
                 }
             }
         };
-        if (profileCompleted) {
-            return (
-                <div className={"header fade-effect"}>
-                    <Search {...searchProps}/>
+        const renderRightMostButton = () => {
+            if (loggedIn && profileCompleted) {
+                return (
                     <div
-                        className={`main-button ${showMenu ? 'hover' : ''}`}
+                        className={`main-button button ${showMenu ? 'hover' : ''}`}
                         onClick={() => setShowMenu(!showMenu)}
                         ref={buttonRef}>
                         <img src={croppedURL} alt={'User Profile'} className={"image-icon"}/>
-                        <span className={"name"}>{name.first}</span>
+                        <span className={"name"}>{`${name.first} ${name.last[0]}.`}</span>
                         <CSSTransition in={showMenu} timeout={100} mountOnEnter unmountOnExit classNames={"menu"}>
                             <Paper elevation={8} className={"menu-option"}>
                                 <div className={"option"} onClick={viewProfile}>
@@ -107,19 +124,27 @@ function Header({appState, profileState, dispatch}) {
                             </Paper>
                         </CSSTransition>
                     </div>
+                );
+            }
+            return (
+                <div className={"main-button button"} onClick={loginPage}>
+                    Login
                 </div>
             );
-        }
+        };
 
-       return (
-           <div className={"header fade-effect default"}>
-               <Search {...searchProps}/>
-               <div className={`main-button loading-bg`}>
-                   <div className={"image-icon"}/>
-                   <span className={"name default"}/>
-               </div>
-           </div>
-       );
+        return (
+            <div className={"header fade-effect"}>
+                <Search {...searchProps}/>
+                <div className={"right"}>
+                    <div className={'link about button'} onClick={aboutPage}>
+                        <HomeOutlinedIcon/>
+                    </div>
+                    <div className={"spacer"}/>
+                    {renderRightMostButton()}
+                </div>
+            </div>
+        );
     }
     return null;
 }

@@ -1,8 +1,18 @@
 .profile-button {
-  width: 275px;
+  width: 66px;
   overflow: hidden;
   transition: width .2s linear;
   display: flex;
+
+  &.OPEN {
+    width: 275px;
+
+    .profile-container .description {
+      transition: height 0s linear .2s, opacity .2s ease-out .2s;
+      height: 50px;
+      opacity: 1;
+    }
+  }
 
   .profile-container {
     display: flex;
@@ -27,6 +37,9 @@
       justify-content: center;
       padding-left: .5em;
       transition: opacity .2s linear .1s;
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
 
       .name {
         text-transform: capitalize;
@@ -39,6 +52,9 @@
         font-size: .75em;
         opacity: .5;
         flex-wrap: wrap;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         .tag {
           font-style: italic;

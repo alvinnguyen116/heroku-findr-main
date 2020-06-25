@@ -7,11 +7,11 @@ import './search.scss';
 /**
  * @param value  {string}
  * @param setValue {function}
- * @param onKeyPress {function}
+ * @param onChange {function}
  * @desc A controlled input component for displaying
  * a search bar.
  */
-function Search({value, setValue, handlers = {}, placeholder = 'Search'}) {
+function Search({value, setValue, onChange, handlers = {}, placeholder = 'Search'}) {
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 

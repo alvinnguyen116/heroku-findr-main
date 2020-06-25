@@ -4,9 +4,9 @@ import ProfileButton from "./profile-button/profile-button";
 import Card from "@material-ui/core/Card";
 import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
 import ArrowForwardIosRoundedIcon from "@material-ui/icons/ArrowForwardIosRounded";
-import {isEmptyProfile, averageTagsScore, debouncedProfileSearch} from "../../utils";
-import {ROUTES} from '../../utils/enums';
-import {reroute, keyDown, keyUp, setIndex, setStartSearch, setPreloadDone} from "../../redux/actions/app";
+import {isEmptyProfile, averageTagsScore, debouncedProfileSearch, getCookie} from "../../utils";
+import {COOKIE, ROUTES} from '../../utils/enums';
+import {reroute, keyDown, keyUp, setIndex, setPreloadDone} from "../../redux/actions/app";
 import {INITIAL_STATE} from "../../redux/reducers/profile";
 import Profile from "../../components/profile/profile";
 import './find-page.scss';
@@ -20,42 +20,39 @@ import './find-page.scss';
  * Displays a random list of users and allow
  * users to be searched by tags.
  *
- * Only logged in users can see this private page.
  */
 function FindPage({appState, profileState, dispatch}) {
 
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
     const {data} = appState.profiles;
-    const {searchTag, currentIndex, preloadDone} = appState;
+    const {searchTag, currentIndex, preloadDone, accessToken} = appState;
     const sortedProfiles = data.map(profile => {
         const score = averageTagsScore(profile.tags, searchTag);
         return {...profile, score};
     }).sort((a,b) => b.score - a.score);
+    const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true" && accessToken;
     const profileCompleted = !isEmptyProfile(profileState);
-    const MENU_STYLE = Object.freeze({
-        OPEN: {
-            container: {width: 275},
-            description: {opacity: 1}
-        },
-        CLOSED: {
-            container: {width: 66},
-            description: {opacity: 0}
-        }
-    });
 
     // COMPONENT STATE -------------------------------------------------------------------------------------------------
 
     const [menuOpen, setMenuOpen] = useState(true);
-    const [buttonStyle, setButtonStyle] = useState(MENU_STYLE.OPEN);
 
     // METHODS ---------------------------------------------------------------------------------------------------------
 
     function keydownListener(e) {
         const {keyCode} = e;
         switch(keyCode) {
+            case 37:
+                setMenuOpen(false);
+                e.preventDefault();
+                break;
             case 38:
                 dispatch(keyUp());
+                e.preventDefault();
+                break;
+            case 39:
+                setMenuOpen(true);
                 e.preventDefault();
                 break;
             case 40:
@@ -74,27 +71,11 @@ function FindPage({appState, profileState, dispatch}) {
      * to the next steps page.
      */
     useEffect(() => {
-        if (preloadDone) {
-            if (!profileCompleted) {
-                dispatch(reroute(ROUTES.NEXT_STEPS));
-            } else if (!searchTag && (data && !data.length)) {
-                dispatch(setPreloadDone(false));
-                debouncedProfileSearch({});
-            }
+        if (!searchTag && (data && !data.length)) {
+            dispatch(setPreloadDone(false));
+            debouncedProfileSearch({});
         }
-    }, [preloadDone, profileCompleted]);
-
-    /**
-     * @desc Whenever the menu is resized,
-     * change the menu style.
-     */
-    useEffect(() => {
-        if (menuOpen) {
-            setButtonStyle(MENU_STYLE.OPEN);
-        } else {
-            setButtonStyle(MENU_STYLE.CLOSED);
-        }
-    }, [menuOpen]);
+    }, []);
 
     /**
      * @desc Whenever the current index changes,
@@ -119,25 +100,17 @@ function FindPage({appState, profileState, dispatch}) {
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
     const renderProfileButtons = (showDefault = false) => {
-        let props = {
-            style: buttonStyle
-        };
         let profileButtons = [...Array(10).keys()].map(i =>
-            <ProfileButton {...props} showDefault={true} key={i}/>
+            <ProfileButton className={menuOpen ? "OPEN" : ""} showDefault={true} key={i}/>
         );
         if (!showDefault) {
             profileButtons = sortedProfiles.map((profile, i) => {
                 const {profilePicture, name, tags, _id} = profile;
-                props = {
-                    ...props,
+                const props = {
                     profilePicture, name, tags,
                     onClick: () => dispatch(setIndex(i)),
-                    className: i === currentIndex ? 'selected' : '',
+                    className: `${(i === currentIndex ? 'selected' : '')} ${menuOpen ? "OPEN" : ""}`,
                 };
-                if (!menuOpen) {
-                    delete props.name;
-                    delete props.tags;
-                }
                 return (<ProfileButton {...props} key={_id}/>);
             });
         }
@@ -154,7 +127,7 @@ function FindPage({appState, profileState, dispatch}) {
         );
     };
 
-    if (profileCompleted && preloadDone) {
+    if (preloadDone) {
         if (currentIndex < sortedProfiles.length && sortedProfiles[currentIndex]) {
             return (
                 <div className={"find-page"}>

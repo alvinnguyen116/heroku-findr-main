@@ -177,7 +177,7 @@ export function logout(successCallback) {
         AuthAPI.logout().then(() => {
             dispatch(successLogout());
             successCallback && successCallback();
-            dispatch(reroute(ROUTES.REGISTER));
+            dispatch(reroute(ROUTES.LOGIN));
         }).catch(res => {
             dispatch(failureLogout(res));
         });
@@ -201,10 +201,10 @@ export function searchProfiles({offset = 0, limit = 25, tags= '', successCallbac
 
     return (dispatch, getState) => {
         dispatch(initial());
-        const {accessToken : token} = getState().app;
-        if (!token) return dispatch(createError("No access token."));
+        // const {accessToken : token} = getState().app;
+        // if (!token) return dispatch(createError("No access token."));
 
-        MainAPI.searchProfiles({offset,limit,tags,token}).then(async ({data}) => {
+        MainAPI.searchProfiles({offset,limit,tags}).then(async ({data}) => {
             let {data : profiles} = data;
 
             // loop through each profile

@@ -8,10 +8,9 @@ const router = Router();
 
 /**
  * @desc Search for profiles based off a tag string.
- * Protect with passport JWT strategy.
  * Optional limit and offset can be applied.
  */
-router.route("/search/").get(authJWT, async(req, res) => {
+router.route("/search/").get(async(req, res) => {
     try {
         const {tags} = req.query;
         const options = safeCastOptions(req.query);

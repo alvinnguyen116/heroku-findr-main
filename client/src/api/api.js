@@ -2,7 +2,7 @@ import axios from 'axios';
 import { GiphyFetch } from '@giphy/js-fetch-api'
 
 const URL = {
-    LOCAL: "http://localhost:3000",
+    LOCAL: "http://localhost:4000",
     PROD: "https://findr-main-api.herokuapp.com"
 };
 
@@ -110,13 +110,10 @@ export class MainAPI {
         });
     }
 
-    static searchProfiles({limit = 25, offset = 0, tags = '', token}) {
+    static searchProfiles({limit = 25, offset = 0, tags = ''}) {
         return MainAxios({
             method: 'get',
-            url: `/profile/search?limit=${limit}&offset=${offset}&tags=${tags}`,
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            url: `/profile/search?limit=${limit}&offset=${offset}&tags=${tags}`
         });
     }
 

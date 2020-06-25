@@ -4,9 +4,7 @@ import './profile-button.scss';
 
 function ProfileButton({className = '', profilePicture = {file: ''},
                         name={first:'', last: ''},
-                        tags = [], onClick = () => {},
-                        style={description: {}, container: {}}, showDefault=false}) {
-
+                        tags = [], onClick = () => {}, showDefault=false}) {
 
     // COMPONENT STATE -------------------------------------------------------------------------------------------------
 
@@ -20,10 +18,10 @@ function ProfileButton({className = '', profilePicture = {file: ''},
     if (!showDefault && imgLoaded) profileIconStyle['backgroundImage'] = `url(${profilePicture.file})`;
     if (showDefault) className += ' default loading-bg';
     return (
-        <div className={`profile-button ${className}`} ref={ref} onClick={onClick} style={style.container}>
+        <div className={`profile-button ${className}`} ref={ref} onClick={onClick}>
             <div className={`profile-container ${className}`}>
                 <div className={"profile-icon image-icon"} style={profileIconStyle}/>
-                <div className={"description"} style={style.description}>
+                <div className={"description"}>
                     <div className={"name"}>
                         {name.first} {name.last}
                     </div>

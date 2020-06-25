@@ -8,6 +8,7 @@ import LoginPage from "../../pages/login-page/login-page";
 import NextStepsPage from "../../pages/next-steps-page/NextStepsPage";
 import RegisterPage from "../../pages/register-page/RegisterPage";
 import ProfilePage from "../../pages/profile-page/profile-page";
+import AboutPage from "../../pages/about-page/AboutPage";
 import {fetchNewToken, setBackdrop, reroute, setPreloadDone, setStartSearch} from "../../redux/actions/app";
 import {ROUTES, SNACKBAR_SEVERITY, COOKIE} from '../../utils/enums';
 import {PrivateRoute, PublicRoute, getCookie, isEmptyProfile, debouncedProfileSearch} from "../../utils";
@@ -40,7 +41,7 @@ function App({appState, profileState, dispatch}) {
     const {snackbar, route, accessToken, backdropElement} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
     const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true" && accessToken;
-    const defaultRoute = loggedIn ? (profileCompleted ? ROUTES.FIND_PEOPLE : ROUTES.NEXT_STEPS) : ROUTES.REGISTER;
+    const defaultRoute = ROUTES.FIND_PEOPLE;
 
 
     // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
@@ -71,8 +72,16 @@ function App({appState, profileState, dispatch}) {
      * push route to history.
      */
     useEffect(() => {
-        route && history.push(route);
+        route.length > 1 && history.push(route);
     }, [route]);
+
+    /**
+     * @desc If the route changes, programmatically
+     * push route to history.
+     */
+    useEffect(() => {
+        location && location.pathname && dispatch(reroute(location.pathname));
+    }, [location]);
 
     // HANDLERS --------------------------------------------------------------------------------------------------------
 
@@ -121,11 +130,14 @@ function App({appState, profileState, dispatch}) {
                         <PrivateRoute path={ROUTES.MY_PROFILE}>
                             <ProfilePage/>
                         </PrivateRoute>
-                        <PrivateRoute path={ROUTES.FIND_PEOPLE}>
+                        <Route path={ROUTES.FIND_PEOPLE}>
                             <FindPage/>
-                        </PrivateRoute>
+                        </Route>
                         <PrivateRoute path={ROUTES.NEXT_STEPS}>
                             <NextStepsPage/>
+                        </PrivateRoute>
+                        <PrivateRoute path={ROUTES.ABOUT}>
+                            <AboutPage/>
                         </PrivateRoute>
                         <Route path={ROUTES.LOGIN}>
                             <LoginPage dispatch={dispatch}/>

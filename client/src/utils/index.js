@@ -125,9 +125,6 @@ const debouncedProfileSearch = debounce(({tags = '', successCallback = () => {}}
 const debouncedKeyPress = debounce(value => {
     const {dispatch} = store;
     dispatch(setSearch(value));
-    if (location.pathname !== ROUTES.FIND_PEOPLE) {
-        dispatch(reroute(ROUTES.FIND_PEOPLE));
-    }
     debouncedProfileSearch({tags: value});
 }, 1000);
 
