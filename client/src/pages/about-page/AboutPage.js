@@ -10,7 +10,7 @@ function AboutPage(props) {
     };
 
     return (
-        <div className={"about-page"}>
+        <div className={"about-page fade-in"}>
             <div className={"svg"}>
                 {renderLogos()}
             </div>
