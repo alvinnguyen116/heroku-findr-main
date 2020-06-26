@@ -136,9 +136,9 @@ function App({appState, profileState, dispatch}) {
                         <PrivateRoute path={ROUTES.NEXT_STEPS}>
                             <NextStepsPage/>
                         </PrivateRoute>
-                        <PrivateRoute path={ROUTES.ABOUT}>
+                        <Route path={ROUTES.ABOUT}>
                             <AboutPage/>
-                        </PrivateRoute>
+                        </Route>
                         <Route path={ROUTES.LOGIN}>
                             <LoginPage dispatch={dispatch}/>
                         </Route>
