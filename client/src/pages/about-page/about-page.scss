@@ -60,31 +60,31 @@
       &:nth-child(1) {
         stroke-dashoffset: 385.0559387207031;
         stroke-dasharray: 385.0559387207031;
-        animation: path-1 6s ease-in-out  infinite;
+        animation: path-1 6s ease-in-out .5s infinite;
       }
 
       &:nth-child(2) {
         stroke-dashoffset: 221.47203063964844;
         stroke-dasharray: 221.47203063964844;
-        animation: path-2 6s ease-in-out infinite;
+        animation: path-2 6s ease-in-out .5s infinite;
       }
 
       &:nth-child(3) {
         stroke-dashoffset: 613.442749023437;
         stroke-dasharray: 613.442749023437;
-        animation: path-3 6s ease-in-out infinite;
+        animation: path-3 6s ease-in-out .5s infinite;
       }
 
       &:nth-child(4) {
         stroke-dashoffset: 326.978394;
         stroke-dasharray: 326.978394;
-        animation: path-4 6s ease-in-out infinite;
+        animation: path-4 6s ease-in-out .5s infinite;
       }
 
       &:nth-child(5) {
         stroke-dashoffset: 406.88147;
         stroke-dasharray: 406.88147;
-        animation: path-5 6s ease-in-out infinite;
+        animation: path-5 6s ease-in-out .5s infinite;
       }
     }
   }
