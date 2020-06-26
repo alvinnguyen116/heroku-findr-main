@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import Paper from '@material-ui/core/Paper';
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import {useLocation} from 'react-router-dom';
 import {connect} from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
@@ -26,7 +27,10 @@ function Header({appState, profileState, dispatch}) {
     const {profilePicture, name} = profileState;
     const {accessToken, searchTag} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
-    const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true" && accessToken;
+    const REMOVE_HEADER = [ROUTES.NEXT_STEPS];
+    const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true";
+    const location = useLocation();
+    const dontShow = REMOVE_HEADER.includes((location.pathname));
 
     // REFERENCES ------------------------------------------------------------------------------------------------------
 
@@ -87,6 +91,10 @@ function Header({appState, profileState, dispatch}) {
         dispatch(reroute(ROUTES.LOGIN));
     };
 
+    const findPage = () => {
+        dispatch(reroute(ROUTES.FIND_PEOPLE));
+    };
+
     // COMPONENTS ------------------------------------------------------------------------------------------------------
     const searchProps = {
         value, setValue,
@@ -128,16 +136,28 @@ function Header({appState, profileState, dispatch}) {
         );
     };
 
-    return (
-        <div className={"header fade-effect"}>
-            <Search {...searchProps}/>
+    const renderRight = () => {
+        if (loggedIn && !profileCompleted) return null;
+        return (
             <div className={"right"}>
-                <div className={'link about button'} onClick={aboutPage}>
+                <div className={'link about button'} onClick={findPage}>
                     <HomeOutlinedIcon/>
+                </div>
+                <div className={"link home button"} onClick={aboutPage}>
+                    <InfoOutlinedIcon/>
                 </div>
                 <div className={"spacer"}/>
                 {renderRightMostButton()}
             </div>
+        );
+    };
+
+    if (dontShow) return null;
+
+    return (
+        <div className={"header fade-effect"}>
+            <Search {...searchProps}/>
+            {renderRight()}
         </div>
     );
 }

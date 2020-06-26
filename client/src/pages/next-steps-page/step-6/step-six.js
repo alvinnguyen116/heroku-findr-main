@@ -121,7 +121,7 @@ function StepSix({appState, gifs, setGifs, searchValue, setSearchValue, dispatch
 
     const searchProps = {
         value: searchValue,
-        onChange: e => setSearchValue(e.target.value),
+        setValue: setSearchValue,
         placeholder: 'Search GIFs'
     };
 

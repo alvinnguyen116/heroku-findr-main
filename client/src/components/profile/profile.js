@@ -117,8 +117,10 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
         if (aboutMe) {
             const newAboutMe = [];
             aboutMe.split("\n").forEach((str, i) => {
-               newAboutMe.push(<span key={i}>{str}</span>);
-               newAboutMe.push(<br key={`${i}-break`}/>);
+                if (str && str.trim()) {
+                    newAboutMe.push(<span key={i}>{str}</span>);
+                    newAboutMe.push(<br key={`${i}-break`}/>);
+                }
             });
             return (
                 <Card elevation={3} className={`about-me`} style={cardStyle}>

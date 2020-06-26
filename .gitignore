@@ -1,3 +1,7 @@
 .env
 /node_modules
 /dist
+
+client/node_modules/
+client/package.json
+client/yarn.lock
