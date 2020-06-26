@@ -23,8 +23,8 @@ function AboutPage(props) {
                     </div>
                 </div>
                 <div className={"row"}>
-                    <div className={"label"}>Motivation</div>
-                    <div>I wanted to be able to find people quickly associated with some tag.</div>
+                    <div className={"label"}>Goal</div>
+                    <div>Quickly find someone associated with some tag.</div>
                 </div>
             </Card>
         </div>
