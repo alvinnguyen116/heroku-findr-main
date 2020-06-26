@@ -26,10 +26,7 @@ function Header({appState, profileState, dispatch}) {
     const {profilePicture, name} = profileState;
     const {accessToken, searchTag} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
-    const HEADER_ROUTES = [ROUTES.FIND_PEOPLE, ROUTES.MY_PROFILE, ROUTES.ABOUT];
     const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true" && accessToken;
-    const location = useLocation();
-    const showHeader = HEADER_ROUTES.includes(location.pathname);
 
     // REFERENCES ------------------------------------------------------------------------------------------------------
 
@@ -91,62 +88,58 @@ function Header({appState, profileState, dispatch}) {
     };
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
-
-    if (showHeader)  {
-        const searchProps = {
-            value, setValue,
-            placeholder: 'Search Tags',
-            handlers: {
-                onKeyPress: e => {
-                    if (e.key === "Enter") {
-                        dispatch(reroute(ROUTES.FIND_PEOPLE));
-                    }
+    const searchProps = {
+        value, setValue,
+        placeholder: 'Search Tags',
+        handlers: {
+            onKeyPress: e => {
+                if (e.key === "Enter") {
+                    dispatch(reroute(ROUTES.FIND_PEOPLE));
                 }
             }
-        };
-        const renderRightMostButton = () => {
-            if (loggedIn && profileCompleted) {
-                return (
-                    <div
-                        className={`main-button button ${showMenu ? 'hover' : ''}`}
-                        onClick={() => setShowMenu(!showMenu)}
-                        ref={buttonRef}>
-                        <img src={croppedURL} alt={'User Profile'} className={"image-icon"}/>
-                        <span className={"name"}>{`${name.first} ${name.last[0]}.`}</span>
-                        <CSSTransition in={showMenu} timeout={100} mountOnEnter unmountOnExit classNames={"menu"}>
-                            <Paper elevation={8} className={"menu-option"}>
-                                <div className={"option"} onClick={viewProfile}>
-                                    <span className={"label primary"}>View Profile</span>
-                                </div>
-                                <div className={"option"} onClick={signOut}>
-                                    <span className={"label secondary"}>Sign Out</span>
-                                </div>
-                            </Paper>
-                        </CSSTransition>
-                    </div>
-                );
-            }
+        }
+    };
+    const renderRightMostButton = () => {
+        if (loggedIn && profileCompleted) {
             return (
-                <div className={"main-button button"} onClick={loginPage}>
-                    Login
+                <div
+                    className={`main-button button ${showMenu ? 'hover' : ''}`}
+                    onClick={() => setShowMenu(!showMenu)}
+                    ref={buttonRef}>
+                    <img src={croppedURL} alt={'User Profile'} className={"image-icon"}/>
+                    <span className={"name"}>{`${name.first} ${name.last[0]}.`}</span>
+                    <CSSTransition in={showMenu} timeout={100} mountOnEnter unmountOnExit classNames={"menu"}>
+                        <Paper elevation={8} className={"menu-option"}>
+                            <div className={"option"} onClick={viewProfile}>
+                                <span className={"label primary"}>View Profile</span>
+                            </div>
+                            <div className={"option"} onClick={signOut}>
+                                <span className={"label secondary"}>Sign Out</span>
+                            </div>
+                        </Paper>
+                    </CSSTransition>
                 </div>
             );
-        };
-
+        }
         return (
-            <div className={"header fade-effect"}>
-                <Search {...searchProps}/>
-                <div className={"right"}>
-                    <div className={'link about button'} onClick={aboutPage}>
-                        <HomeOutlinedIcon/>
-                    </div>
-                    <div className={"spacer"}/>
-                    {renderRightMostButton()}
-                </div>
+            <div className={"main-button button"} onClick={loginPage}>
+                Login
             </div>
         );
-    }
-    return null;
+    };
+
+    return (
+        <div className={"header fade-effect"}>
+            <Search {...searchProps}/>
+            <div className={"right"}>
+                <div className={'link about button'} onClick={aboutPage}>
+                    <HomeOutlinedIcon/>
+                </div>
+                <div className={"spacer"}/>
+                {renderRightMostButton()}
+            </div>
+        </div>
+    );
 }
 
 const mapStateToProps = state => ({
