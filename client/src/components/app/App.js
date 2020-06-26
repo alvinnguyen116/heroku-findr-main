@@ -38,11 +38,10 @@ function App({appState, profileState, dispatch}) {
 
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
-    const {snackbar, route, accessToken, backdropElement} = appState;
+    const {snackbar, route, accessToken, backdropElement, preloadDone} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
     const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true" && accessToken;
     const defaultRoute = ROUTES.FIND_PEOPLE;
-
 
     // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
 
@@ -59,6 +58,11 @@ function App({appState, profileState, dispatch}) {
         }
     }, []);
 
+    useEffect(() => {
+        if (preloadDone && loggedIn && !profileCompleted) {
+            dispatch(reroute(ROUTES.NEXT_STEPS));
+        }
+    }, [preloadDone]);
     /**
      * @desc If there is a snackbar message,
      * display it.
