@@ -22,6 +22,7 @@
       color: var(--primary-color);
       font-weight: 600;
     }
+
     .row {
       display: flex;
       flex-direction: column;
@@ -45,6 +46,10 @@
     flex-wrap: wrap;
     justify-content: center;
     opacity: .5;
+    height: 130vh;
+    width: 130vw;
+    top: -30vh;
+    left: -20vw;
 
     svg {
       padding: 1em;

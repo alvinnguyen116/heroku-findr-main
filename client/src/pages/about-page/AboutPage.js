@@ -3,10 +3,11 @@ import Card from "@material-ui/core/Card";
 import Logo from '../../assets/logo.js';
 import './about-page.scss';
 
+// todo: make bg 120% and overlap w/ header
 function AboutPage(props) {
 
     const renderLogos = ()=> {
-        return [...Array(15).keys()].map(i => <Logo key={i}/>);
+        return [...Array(30).keys()].map(i => <Logo key={i}/>);
     };
 
     return (

@@ -46,10 +46,16 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
 
     const renderGifs = () => {
         const scrollGif = scrollLength => () => {
-            const newValue = Math.min(
+            const MAX_VALUE = gifsRef.current.scrollWidth - gifsRef.current.offsetWidth;
+            let newValue = Math.min(
                 Math.max(gifsRef.current.scrollLeft + scrollLength, 0),
-                gifsRef.current.scrollWidth - gifsRef.current.offsetWidth
+                MAX_VALUE
             );
+            if ((scrollLength < 0) && (newValue < 100)) {
+                newValue = 0;
+            } else if ((scrollLength > 0) && (MAX_VALUE - newValue < 100)) {
+                newValue = MAX_VALUE;
+            }
             gifsRef.current.scrollLeft = newValue;
             setScrollLeft(newValue);
         };
@@ -75,13 +81,13 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
 
             return (
                 <div className={"gif-container"}>
-                    <IconButton onClick={scrollGif(-300)} style={leftStyle}>
+                    <IconButton onClick={scrollGif(-250)} style={leftStyle}>
                         <ArrowBackIosRoundedIcon />
                     </IconButton>
                     <div className={"gifs"} ref={gifsRef}>
                         {gifsComponent}
                     </div>
-                    <IconButton onClick={scrollGif(300)} style={rightStyle}>
+                    <IconButton onClick={scrollGif(250)} style={rightStyle}>
                         <ArrowForwardIosRoundedIcon />
                     </IconButton>
                 </div>
@@ -169,10 +175,10 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
                 <div className={`pic-and-bio`}>
                     <div className={"profile-picture"}>
                         {renderProfilePicture()}
+                        {renderName()}
                     </div>
                     {renderQuote()}
                 </div>
-                {renderName()}
                 {renderTags()}
             </Card>
             {renderAboutMe()}

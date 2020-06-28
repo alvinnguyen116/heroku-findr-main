@@ -66,10 +66,6 @@ function FindPage({appState, profileState, dispatch}) {
 
     // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
 
-    /**
-     * @desc If the profile is empty, redirect the user
-     * to the next steps page.
-     */
     useEffect(() => {
         if (!searchTag && (data && !data.length)) {
             dispatch(setPreloadDone(false));

@@ -6,8 +6,8 @@
     align-self: center;
     display: grid;
     grid-template-columns: repeat(2,1fr);
-    max-width: 80%;
-    padding: 1em 0 .5em;
+    grid-gap: .5em;
+    padding: 1em 1em .5em 1em;
     background-color: var(--default-color);
     border-radius: 4px;
 
@@ -15,7 +15,7 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-
+      width: 160px;
 
       &.light {
         justify-content: flex-end;
@@ -36,6 +36,10 @@
       margin-bottom: .5em;
       padding: 8px;
       position: relative;
+
+      &:nth-child(3n) {
+        margin-right: 0;
+      }
 
       &.light {
         background-color: black;
