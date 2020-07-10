@@ -379,8 +379,12 @@ export function instagramGetToken({code = '', successCallback = () => {}}) {
 
         dispatch(initial());
         MainAPI.getAccessTokenFromCode({code, accountType: ACCOUNT_TYPE.IG}).then(res => {
-            dispatch(success(res.data));
-            successCallback && successCallback();
+            if  (res && res.data) {
+                dispatch(success(res.data));
+                successCallback && successCallback();
+            } else {
+                dispatch(failure("No data in the response"));
+            }
         }).catch(res => {
             dispatch(failure(res.response.data.err));
             dispatch(snackbarMessage({message: res.response.data.err, type: SNACKBAR_SEVERITY.ERROR}));

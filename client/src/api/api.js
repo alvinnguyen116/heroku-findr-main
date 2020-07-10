@@ -89,14 +89,15 @@ export class MainAPI {
     }
 
     static getAccessTokenFromCode({code, authType = AUTH_TYPE.LOGIN, accountType = ACCOUNT_TYPE.GOOGLE}) {
+        const url = accountType === ACCOUNT_TYPE.GOOGLE ? `https://oauth2.googleapis.com/token` :
+            'https://api.instagram.com/oauth/access_token';
+
         const client_id = accountType === ACCOUNT_TYPE.GOOGLE ?
             '1034190105133-cl43sru1un6mdkq6ujsoi7jmmn1r3g36.apps.googleusercontent.com' :
             '277459566825286';
         const client_secret = accountType === ACCOUNT_TYPE.GOOGLE ? '3DN5stqM8sVgznkc1VOVzc8m' :
             'a139b93a0ca153511ba9f64f17c508b3';
         const redirect_uri = accountType === ACCOUNT_TYPE.GOOGLE ? createRedirectUri(authType) : createIGRedirectURI();
-        const url = accountType === ACCOUNT_TYPE.GOOGLE ? `https://oauth2.googleapis.com/token` :
-            'https://api.instagram.com/oauth/access_token';
 
         return axios({
             url,
@@ -108,6 +109,9 @@ export class MainAPI {
                 grant_type: 'authorization_code',
                 code
             },
+            headers: {
+                'content-type': 'jsonp'
+            }
         });
     };
 

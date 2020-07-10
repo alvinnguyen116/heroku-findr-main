@@ -13,7 +13,9 @@ function GoogleAuth({className = '', type}) {
     return (
         <a {...hyperlinkProps}>
             <div className={`google-auth ${className}`}>
-                <GoogleLogo className={'google-logo'}/>
+                <div className={"logo"}>
+                    <GoogleLogo/>
+                </div>
                 <div className={"text"}>
                     {type === AUTH_TYPE.LOGIN ? 'Sign in with Google' : 'Sign up with Google'}
                 </div>

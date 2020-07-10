@@ -16,13 +16,13 @@
 
     &.menu- {
       &open {
-        --len: 358px;
+        --len: 352px;
         margin-left: var(--len);
         width: calc(100% - var(--len));
       }
 
       &closed {
-        --len: 107px;
+        --len: 101px;
         margin-left: var(--len);
         width: calc(100% - var(--len));
       }
@@ -75,7 +75,7 @@
     flex-direction: column;
     overflow-y: scroll;
     overflow-x: hidden;
-    padding: 1em;
+    padding: 1em calc(1em - var(--scroll-bar-width) + 1px) 1em 1em;
     height: 100%;
     flex: none;
     box-sizing: border-box;
