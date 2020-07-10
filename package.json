@@ -4,12 +4,9 @@
   "description": "The main server. Handles non-authentication routes and serving the frontend.",
   "scripts": {
     "start": "node ./dist/server.js",
-    "build": "rm -rf dist && webpack && cp -avr ./client/public/* ./dist/public",
+    "build": "rm -rf dist && webpack && cp -avr ./client/public/* ./dist/public && rm ./dist/public/index.html",
     "dev": "concurrently \"yarn build && yarn start\" \"cd ./client && yarn start\"",
     "heroku-postbuild": "npm install && npm run build"
-  },
-  "engines": {
-    "node": "14.4.0"
   },
   "keywords": [
     "React",
