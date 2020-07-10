@@ -1,7 +1,6 @@
 import React from 'react';
 
 function Logo(props) {
-
     return (
         <svg {...props} width="371" height="103" viewBox="0 0 371 101" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="none" stroke="black" strokeWidth="5" d="M55.0379 0.34399V8.696H10.6859V46.28H48.1259V54.632H10.6859V101H0.605942V0.34399H55.0379Z"/>

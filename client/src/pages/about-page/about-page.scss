@@ -1,9 +1,8 @@
 .about-page {
   display: flex;
   justify-content: center;
-  padding-top: var(--header-height);
   box-sizing: border-box;
-  height: 100vh;
+  height: -webkit-fill-available;
   width: 100%;
   position: relative;
   overflow: hidden;
@@ -48,7 +47,7 @@
     opacity: .5;
     height: 130vh;
     width: 130vw;
-    top: -30vh;
+    top: -15vh;
     left: -20vw;
 
     svg {

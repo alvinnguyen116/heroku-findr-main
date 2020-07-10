@@ -1,14 +1,14 @@
 import React, {useState, useContext} from 'react';
 import Button from '@material-ui/core/Button';
 import Email from '../../components/input/email/Email';
-import Password from "../../components/input/Password";
+import Password from "../../components/input/password/Password";
 import {isValidEmail} from "../../utils/validators";
 import {useInput} from "../../utils/hooks";
-import {localLogin, reroute, setPreloadDone} from "../../redux/actions/app";
-import {getProfile} from "../../redux/actions/profile";
-import {ROUTES} from '../../utils/enums';
+import {localLogin} from "../../redux/actions/app";
 import {ThemeContext} from '../../utils/theme';
-import {Link} from "react-router-dom";
+import GoogleAuth from '../../components/input/google/Google';
+import LinkInstagram from "../../components/input/instagram/Instagram";
+import {AUTH_TYPE} from "../../utils/enums";
 import Paper from '@material-ui/core/Paper';
 import './login-page.scss';
 
@@ -35,13 +35,7 @@ function LoginPage({dispatch}) {
      */
     const onClick = e => {
         e.preventDefault();
-        const successCallback = () => {
-            dispatch(reroute(ROUTES.FIND_PEOPLE)); // 2) reroute
-            dispatch(getProfile(() => { // 3) get profile information
-                dispatch(setPreloadDone(true));
-            }));
-        };
-        dispatch(localLogin({email, password, successCallback})); // 1) login and get tokens
+        dispatch(localLogin({email, password})); // 1) login and get tokens
     };
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
@@ -55,26 +49,22 @@ function LoginPage({dispatch}) {
         onClick
     };
 
-    const linkStyle = {
-        color: Theme.primary.A700
-    };
-
     return (
-        <Paper elevation={3} className={'login-page fade-in'}>
-            <h1 className={"welcome-title"}>Login to My <b>Findr</b></h1>
-            <form>
-                <Email className={"text-field"} error={emailError} onChange={onChangeEmail}/>
-                <Password className={"text-field"} onChange={e => setPassword(e.currentTarget.value)}/>
-                <div className={"link-and-button"}>
-                    <span className={"register-redirect"}>
-                        <Link to={ROUTES.REGISTER} className={"link"} style={linkStyle}>Create an account</Link>
-                    </span>
-                    <Button {...buttonProps}>
-                        Login
-                    </Button>
-                </div>
-            </form>
-        </Paper>
+        <div className={'login-page fade-in'}>
+            <Paper elevation={3} className={"local"}>
+                <form>
+                    <Email className={"text-field"} error={emailError} onChange={onChangeEmail} email={email}/>
+                    <Password className={"text-field"} onChange={e => setPassword(e.currentTarget.value)} password={password}/>
+                    <div className={"link-and-button"}>
+                        <Button {...buttonProps}>
+                            Login
+                        </Button>
+                    </div>
+                </form>
+                <GoogleAuth type={AUTH_TYPE.LOGIN} className={"google"}/>
+                <LinkInstagram/>
+            </Paper>
+        </div>
     );
 }
 

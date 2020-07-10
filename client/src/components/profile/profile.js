@@ -39,8 +39,9 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
     // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
 
     useEffect(() => {
-
-    }, [gifsRef]);
+        const main = document.querySelector("main");
+        main.scrollIntoView();
+    }, [className, catchphrase, profilePicture, gifs, name, tags, aboutMe, theme]);
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 

@@ -1,9 +1,11 @@
 import axios from 'axios';
-import { GiphyFetch } from '@giphy/js-fetch-api'
+import * as qs from 'query-string';
+import { GiphyFetch } from '@giphy/js-fetch-api';
+import {ACCOUNT_TYPE, createRedirectUri, createIGRedirectURI, AUTH_TYPE} from "../utils/enums";
 
 const URL = {
     LOCAL: "http://localhost:4000",
-    PROD: "https://findr-main-api.herokuapp.com"
+    PROD: "https://www.findrrr.com"
 };
 
 /**
@@ -86,6 +88,46 @@ export class MainAPI {
         });
     }
 
+    static getAccessTokenFromCode({code, authType = AUTH_TYPE.LOGIN, accountType = ACCOUNT_TYPE.GOOGLE}) {
+        const client_id = accountType === ACCOUNT_TYPE.GOOGLE ?
+            '1034190105133-cl43sru1un6mdkq6ujsoi7jmmn1r3g36.apps.googleusercontent.com' :
+            '277459566825286';
+        const client_secret = accountType === ACCOUNT_TYPE.GOOGLE ? '3DN5stqM8sVgznkc1VOVzc8m' :
+            'a139b93a0ca153511ba9f64f17c508b3';
+        const redirect_uri = accountType === ACCOUNT_TYPE.GOOGLE ? createRedirectUri(authType) : createIGRedirectURI();
+        const url = accountType === ACCOUNT_TYPE.GOOGLE ? `https://oauth2.googleapis.com/token` :
+            'https://api.instagram.com/oauth/access_token';
+
+        return axios({
+            url,
+            method: 'post',
+            data: {
+                client_id,
+                client_secret,
+                redirect_uri,
+                grant_type: 'authorization_code',
+                code
+            },
+        });
+    };
+
+    static getGoogleUserInfo(accessToken) {
+        return axios({
+            url: 'https://www.googleapis.com/oauth2/v2/userinfo',
+            method: 'get',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+    };
+
+    static getInstagramUserInfo({user_id, access_token}) {
+        return axios({
+            url: `  'https://graph.instagram.com/${user_id}?fields=id,username&access_token=${access_token}`,
+            method: 'get',
+        });
+    };
+
     /**
      * @param original
      * @param cropped
@@ -111,9 +153,12 @@ export class MainAPI {
     }
 
     static searchProfiles({limit = 25, offset = 0, tags = ''}) {
+        const queryParams = qs.stringify({
+           limit, offset, tags
+        });
         return MainAxios({
             method: 'get',
-            url: `/profile/search?limit=${limit}&offset=${offset}&tags=${tags}`
+            url: `/profile/search?${queryParams}`
         });
     }
 

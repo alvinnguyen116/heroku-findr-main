@@ -3,8 +3,9 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: 4px;
+  padding: 4px 8px 0 0;
   align-items: center;
+  justify-content: space-between;
   display: flex;
   height: var(--header-height);
   box-sizing: border-box;
@@ -13,32 +14,44 @@
   z-index: 1;
   border-radius: 0 !important;
 
-  .link {
-    color: black;
-    text-decoration: none;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .home, .login {
+    font-weight: 100;
+    padding: 8px;
+    color: #0000009c;
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s linear, transform .2s linear;
+    transform: scale(1);
 
     &:hover {
       cursor: pointer;
+      transform: scale(1.05);
+      border-color: rgba(0, 0, 0, 0.26);
     }
   }
 
-  .right {
+  .login {
+    margin-right: 12px;
+  }
+
+  .left {
+    height: 100%;
     display: flex;
     align-items: center;
 
-    .link {
-      width: 43px;
-      height: 43px;
+    svg.icon {
+      height: 40px;
+      width: 40px;
+      padding: 12px;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 
   .search {
-    margin-left: 8px;
     width: 273px;
+    height: 40px;
     justify-content: center;
 
     input {
@@ -61,13 +74,16 @@
     }
 
     svg {
-      fill: #65676b;
+      --len: 30px;
+      height: var(--len);
+      width: var(--len);
+      fill: #65676b91;
     }
   }
 
   .main-button {
     --img-len: 35px;
-    padding: 4px 12px;
+    padding: 4px;
 
     .image-icon{
       height: var(--img-len);

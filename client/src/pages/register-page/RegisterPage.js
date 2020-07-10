@@ -1,17 +1,14 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import Paper from '@material-ui/core/Paper';
-import {ThemeContext} from "../../utils/theme";
 import Email from '../../components/input/email/Email';
-import Password from "../../components/input/Password";
+import Password from "../../components/input/password/Password";
 import Button from "@material-ui/core/Button";
 import {register} from "../../redux/actions/app";
 import {isValidEmail} from "../../utils/validators";
-import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
-import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
+import GoogleAuth from "../../components/input/google/Google";
 import {useInput} from "../../utils/hooks";
 import './register-page.scss';
-import {Link} from "react-router-dom";
-import {ROUTES} from "../../utils/enums";
+import {AUTH_TYPE} from "../../utils/enums";
 import store from '../../redux/store';
 
 /**
@@ -27,22 +24,25 @@ function RegisterPage() {
 
     const [email, emailError, onChangeEmail] = useInput(isValidEmail);
     const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
 
     // Password Validations
     const [passCharLimit, setPassCharLimit] = useState(false);
     const [passNumber, setPassNumber] = useState(false);
     const [passUpper, setPassUpper] = useState(false);
     const [passSpecial, setPassSpecial] = useState(false);
-
+    const [passMatch, setPassMatch] = useState(false);
 
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
-    const Theme = useContext(ThemeContext);
     const {dispatch} = store;
-    const passwordError = !password || !passCharLimit || !passNumber || !passUpper || !passSpecial;
-    const disableSubmit = emailError || passwordError;
+    const [emailDone, setEmailDone] = useState(false);
+    const passwordError1 = !password || !passCharLimit || !passNumber || !passUpper || !passSpecial;
+    const passwordError =  passwordError1 || !passMatch;
+    const disableSubmit = emailDone ? passwordError : (emailError || !email);
 
     // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
+
     /**
      * @desc Every time the password changes, update the
      * password validations.
@@ -75,47 +75,77 @@ function RegisterPage() {
         } else {
             setPassUpper(false);
         }
-    }, [password]);
+
+        if (password && password2 && password === password2) {
+            setPassMatch(true);
+        } else {
+            setPassMatch(false);
+        }
+    }, [password, password2]);
 
     // HANDLERS --------------------------------------------------------------------------------------------------------
 
     const onClick = e => {
         e.preventDefault();
-        dispatch(register({email, password}));
+        if (!emailDone) {
+            setEmailDone(true);
+        } else {
+            dispatch(register({email, password}));
+        }
     };
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
     const renderPasswordValidations = () => {
-        function renderIcon(pass) {
-            return (pass ? <DoneRoundedIcon className={"done"}/> : <ClearRoundedIcon className={"cancel"}/>);
-        }
         return (
             <div className={"validations"}>
                 <ul>
-                    <li>
-                        {renderIcon(passCharLimit)}
-                        <span>Must be at least 8 characters</span>
+                    <li className={`${passCharLimit ? 'done' : ''}`}>
+                        Must be at least 8 characters
                     </li>
-                    <li>
-                        {renderIcon(passNumber)}
-                        <span>Must contain a number</span>
+                    <li className={`${passNumber ? 'done' : ''}`}>
+                       Must contain a number
                     </li>
-                    <li>
-                        {renderIcon(passUpper)}
-                        <span>Must contain a capital letter</span>
+                    <li className={`${passUpper ? 'done' : ''}`}>
+                      Must contain a capital letter
                     </li>
-                    <li>
-                        {renderIcon(passSpecial)}
-                        <span>Must contain one: ! @ # % &</span>
+                    <li className={`${passSpecial ? 'done' : ''}`}>
+                        Must contain one or more: (! @ # % &)
+                    </li>
+                    <li className={`${passMatch ? 'done' : ''}`}>
+                        Must match
                     </li>
                 </ul>
             </div>
         );
     };
 
-    const pw1Props = {
-        onChange: e => setPassword(e.target.value)};
+    const renderEmailOrPassword = () => {
+        if (emailDone) {
+            const props1 = {
+                onChange: e => setPassword(e.target.value),
+                password,
+                error: passwordError1
+            };
+            const props2 = {
+                onChange: e => setPassword2(e.target.value),
+                password: password2,
+                placeholder: 'Re-type Password',
+                error: !passMatch
+            };
+
+            return (
+                <>
+                    <Password {...props1} />
+                    <Password {...props2} />
+                    {renderPasswordValidations()}
+                </>
+            );
+        }
+        return (
+            <Email className={"email"} error={emailError} onChange={onChangeEmail} email={email}/>
+        );
+    };
 
     const buttonProps = {
         className: "button",
@@ -126,26 +156,29 @@ function RegisterPage() {
         onClick
     };
 
-    const linkStyle = {color: Theme.primary.A700};
+    const backButtonProps = {
+        className: "button",
+        variant: "contained",
+        color: "secondary",
+        type: "button",
+        disabled: !emailDone,
+        onClick: () => setEmailDone(false)
+    };
 
     return (
         <Paper elevation={3}  className={"register-page fade-in"}>
-            <h1 className={"welcome-title"}>Create a New <b>Findr</b></h1>
             <form>
-                <Email error={emailError} onChange={onChangeEmail}/>
-                <Password {...pw1Props}/>
-                {renderPasswordValidations()}
+                {renderEmailOrPassword()}
                 <div className={"link-and-button"}>
-                   <span className={"login-redirect"}>
-                        <Link to={ROUTES.LOGIN} className="link" style={linkStyle}>
-                            Already have an account?
-                        </Link>
-                    </span>
+                    <Button {...backButtonProps}>
+                        Back
+                    </Button>
                     <Button {...buttonProps}>
-                        Sign Up
+                        {emailDone ? 'Sign Up' : 'Next'}
                     </Button>
                 </div>
             </form>
+            {!emailDone ? <GoogleAuth type={AUTH_TYPE.REGISTER} className={"google"}/> : null}
         </Paper>
     );
 }

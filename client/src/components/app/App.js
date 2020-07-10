@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {Switch, useHistory, useLocation, Route, Redirect} from 'react-router-dom';
+import {Switch, useHistory, Route} from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import FindPage from "../../pages/find-page/FindPage";
@@ -8,10 +8,11 @@ import LoginPage from "../../pages/login-page/login-page";
 import NextStepsPage from "../../pages/next-steps-page/NextStepsPage";
 import RegisterPage from "../../pages/register-page/RegisterPage";
 import ProfilePage from "../../pages/profile-page/profile-page";
+import AuthPage from "../../pages/auth-page/AuthPage";
 import AboutPage from "../../pages/about-page/AboutPage";
-import {fetchNewToken, setBackdrop, reroute, setPreloadDone, setStartSearch} from "../../redux/actions/app";
-import {ROUTES, SNACKBAR_SEVERITY, COOKIE} from '../../utils/enums';
-import {PrivateRoute, PublicRoute, getCookie, isEmptyProfile, debouncedProfileSearch} from "../../utils";
+import {fetchNewToken, setBackdrop, reroute, setPreloadDone} from "../../redux/actions/app";
+import {ROUTES, SNACKBAR_SEVERITY, COOKIE, ACCOUNT_TYPE} from '../../utils/enums';
+import {PrivateRoute, getCookie, isEmptyProfile} from "../../utils";
 import {getProfile} from "../../redux/actions/profile";
 import Header from "../header/Header";
 import './App.scss';
@@ -34,14 +35,12 @@ function App({appState, profileState, dispatch}) {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [componentDidMount, setComponentDidMount] = useState(false);
     const history = useHistory();
-    const location = useLocation();
 
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
     const {snackbar, route, accessToken, backdropElement, preloadDone} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
-    const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true" && accessToken;
-    const defaultRoute = ROUTES.FIND_PEOPLE;
+    const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true";
 
     // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
 
@@ -52,17 +51,19 @@ function App({appState, profileState, dispatch}) {
     useEffect(() => {
         setComponentDidMount(true);
         const done = () => dispatch(setPreloadDone(true));
-        if (!loggedIn) {
+        if (loggedIn && !accessToken) {
             const successCallback = () => dispatch(getProfile(done));
             dispatch(fetchNewToken({successCallback, failureCallback: done}));
+        } else {
+            done();
         }
     }, []);
 
     useEffect(() => {
-        if (preloadDone && loggedIn && !profileCompleted) {
+        if (accessToken && preloadDone && !profileCompleted) {
             dispatch(reroute(ROUTES.NEXT_STEPS));
         }
-    }, [preloadDone]);
+    }, [accessToken, preloadDone]);
     /**
      * @desc If there is a snackbar message,
      * display it.
@@ -76,16 +77,8 @@ function App({appState, profileState, dispatch}) {
      * push route to history.
      */
     useEffect(() => {
-        route.length > 1 && history.push(route);
+        route && history.push(route);
     }, [route]);
-
-    /**
-     * @desc If the route changes, programmatically
-     * push route to history.
-     */
-    useEffect(() => {
-        location && location.pathname && dispatch(reroute(location.pathname));
-    }, [location]);
 
     // HANDLERS --------------------------------------------------------------------------------------------------------
 
@@ -99,7 +92,7 @@ function App({appState, profileState, dispatch}) {
             horizontal: "center"
         },
         open: snackbarOpen,
-        autoHideDuration: snackbar.type === SNACKBAR_SEVERITY.SUCCESS ? 3000 : 6000,
+        autoHideDuration: snackbar.type === SNACKBAR_SEVERITY.SUCCESS ? 1000 : 3000,
         onClose: handleClose
     };
 
@@ -134,9 +127,6 @@ function App({appState, profileState, dispatch}) {
                         <PrivateRoute path={ROUTES.MY_PROFILE}>
                             <ProfilePage/>
                         </PrivateRoute>
-                        <Route path={ROUTES.FIND_PEOPLE}>
-                            <FindPage/>
-                        </Route>
                         <PrivateRoute path={ROUTES.NEXT_STEPS}>
                             <NextStepsPage/>
                         </PrivateRoute>
@@ -149,7 +139,15 @@ function App({appState, profileState, dispatch}) {
                         <Route path={ROUTES.REGISTER}>
                             <RegisterPage/>
                         </Route>
-                        <Route render={() => <Redirect to={defaultRoute}/>}/>
+                        <Route path={ROUTES.GOOGLE_AUTH}>
+                            <AuthPage type={ACCOUNT_TYPE.GOOGLE}/>
+                        </Route>
+                        <Route path={ROUTES.INSTAGRAM_AUTH}>
+                            <AuthPage type={ACCOUNT_TYPE.IG}/>
+                        </Route>
+                        <Route path={ROUTES.FIND_PEOPLE}>
+                            <FindPage/>
+                        </Route>
                     </Switch>
                 </main>
             </div>

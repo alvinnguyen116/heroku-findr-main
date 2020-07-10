@@ -35,15 +35,15 @@ import './next-steps-page.scss';
 function NextStepsPage({profileState, appState, dispatch}) {
 
     // CONSTANTS -------------------------------------------------------------------------------------------------------
-
+    const {preloadDone, googleUserInfo} = appState;
     const INITIAL_STATE = {
          catchphrase: {
              quote: '',
              font: FONTS.AMATIC
          },
          name: {
-             first: '',
-             last: ''
+             first: googleUserInfo && googleUserInfo.given_name ? googleUserInfo.given_name : '',
+             last:  googleUserInfo && googleUserInfo.family_name ? googleUserInfo.family_name : '',
          },
          aboutMe: '',
          gifs: [],
@@ -54,7 +54,6 @@ function NextStepsPage({profileState, appState, dispatch}) {
              name: 'default'
          }
     };
-    const {preloadDone} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
 
     // COMPONENT STATE -------------------------------------------------------------------------------------------------

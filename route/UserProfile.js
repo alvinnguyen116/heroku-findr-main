@@ -25,7 +25,8 @@ router.route("/search/").get(async(req, res) => {
             const regex = new RegExp(tagArray.join("|"), 'gim');
 
             // Apply regex
-            data = await UserProfile.find({tags: {$regex: regex}}, null, options);
+            data = await UserProfile.find({tags: {$regex: regex}}, null);
+
             total =  await UserProfile.countDocuments({tags: {$regex: regex}});
         }
         return res.status(200).json({data, total, ...options});

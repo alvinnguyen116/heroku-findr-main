@@ -1,9 +1,9 @@
 import React from 'react';
 import Card from "@material-ui/core/Card";
 import Logo from '../../assets/logo.js';
+import {APP_NAME} from "../../utils/enums";
 import './about-page.scss';
 
-// todo: make bg 120% and overlap w/ header
 function AboutPage(props) {
 
     const renderLogos = ()=> {
@@ -20,7 +20,7 @@ function AboutPage(props) {
                     <div>
                         Welcome, Friends! <br/> <br/>
                         My name is Alvin and I am a Front End Developer. <br/> <br/>
-                        <span className={"findr"}>Findr</span> is a hobby project to stave boredom and express technical creativity.
+                        <span className={"findr"}>{APP_NAME}</span> is a hobby project to stave boredom and express technical creativity.
                     </div>
                 </div>
                 <div className={"row"}>

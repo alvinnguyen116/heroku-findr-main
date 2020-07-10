@@ -16,3 +16,4 @@ export const ROLE = Object.freeze({
     BASIC: "ROLE_BASIC"
 });
 
+const PRIVACY_POLICY_LINK = "https://www.termsfeed.com/live/b8d04e35-4f1f-484d-8b5f-912951235b55";

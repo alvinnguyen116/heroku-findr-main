@@ -1,7 +1,7 @@
 import React from 'react';
 import {Provider} from "react-redux";
 import store from '../redux/store';
-import {ROUTES, COOKIE} from './enums';
+import {ROUTES, COOKIE, ACCOUNT_TYPE} from './enums';
 import { createMuiTheme } from '@material-ui/core/styles';
 import {Route, Redirect} from 'react-router-dom';
 import {
@@ -32,10 +32,7 @@ function dispatchError(err) {
  */
 function PrivateRoute({children,...props}) {
     const render = ({location}) => {
-        console.log("cookie enum: ", COOKIE.LOGGED_IN);
-        console.log("cookie value: ", getCookie(COOKIE.LOGGED_IN));
         const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true";
-        console.log("logged in: ", loggedIn);
         if (loggedIn) return children;
         return (
             <Redirect to={{pathname: ROUTES.REGISTER, state: {from: location}}}/>
@@ -120,13 +117,13 @@ const debouncedProfileSearch = debounce(({tags = '', successCallback = () => {}}
         }}));
     };
     dispatch(searchProfiles({tags, successCallback, failureCallback}));
-}, 1000);
+}, 250);
 
 const debouncedKeyPress = debounce(value => {
     const {dispatch} = store;
     dispatch(setSearch(value));
     debouncedProfileSearch({tags: value});
-}, 1000);
+}, 250);
 
 function modulo(int,n) {
     return ((int % n) + n) % n;
@@ -134,7 +131,7 @@ function modulo(int,n) {
 
 const debouncedGifSearch = debounce(({term, type}) => {
     store.dispatch(searchGifs({term,type}));
-}, 1000);
+}, 250);
 
 /**
  * @param tag {string}
@@ -230,6 +227,17 @@ function AppProvider({children}) {
     );
 }
 
+function setUpUserInfo({getState, email, password, type, failure, dispatch}) {
+    if (type === ACCOUNT_TYPE.GOOGLE) {
+        const {googleUserInfo} = getState().app;
+        if (!googleUserInfo || !googleUserInfo.email || !googleUserInfo.id) {
+            return dispatch(failure("Missing Google User Info from request"));
+        }
+        return [googleUserInfo.email, googleUserInfo.id];
+    }
+    return [email,password];
+}
+
 export {
     dispatchError,
     PrivateRoute,
@@ -244,5 +252,6 @@ export {
     debouncedKeyPress,
     modulo,
     averageTagsScore,
+    setUpUserInfo,
     AppProvider
 };

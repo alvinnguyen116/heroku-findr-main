@@ -1,15 +1,13 @@
 import React, {useEffect, useState, useRef} from 'react';
 import Paper from '@material-ui/core/Paper';
-import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import {useLocation} from 'react-router-dom';
 import {connect} from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import Search from '../input/search/search';
-import {logout, reroute, setPreloadDone} from '../../redux/actions/app';
-import {emptyProfile} from "../../redux/actions/profile";
-import {COOKIE, ROUTES} from '../../utils/enums';
+import {logout, reroute, setInProgress} from '../../redux/actions/app';
+import {COOKIE, ROUTES, APP_NAME} from '../../utils/enums';
 import {isEmptyProfile, debouncedKeyPress, dispatchError, getCookie} from "../../utils";
+import Icon from '../../assets/icon';
 import './header.scss';
 
 /**
@@ -25,12 +23,13 @@ function Header({appState, profileState, dispatch}) {
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
     const {profilePicture, name} = profileState;
-    const {accessToken, searchTag} = appState;
+    const {preloadDone, searchTag} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
-    const REMOVE_HEADER = [ROUTES.NEXT_STEPS];
+    const REMOVE_HEADER = [ROUTES.NEXT_STEPS, '/auth/google/login', '/auth/google/register', ROUTES.BLANK];
     const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true";
     const location = useLocation();
-    const dontShow = REMOVE_HEADER.includes((location.pathname));
+    const dontShow = REMOVE_HEADER.includes(location.pathname);
+    const isLoginPage = location.pathname === ROUTES.LOGIN;
 
     // REFERENCES ------------------------------------------------------------------------------------------------------
 
@@ -64,7 +63,7 @@ function Header({appState, profileState, dispatch}) {
     }, [profilePicture.cropped]);
 
     useEffect(() => {
-        dispatch(setPreloadDone(false));
+        dispatch(setInProgress(true));
         try {
             debouncedKeyPress(value);
         } catch (err) {
@@ -75,8 +74,7 @@ function Header({appState, profileState, dispatch}) {
     // HANDLERS --------------------------------------------------------------------------------------------------------
 
     const signOut = () => {
-        const successCallback = () => dispatch(emptyProfile()); // 2) logs out client side
-        dispatch(logout(successCallback)); // 1) logs out server side
+        dispatch(logout());
     };
 
     const viewProfile = () => {
@@ -91,11 +89,16 @@ function Header({appState, profileState, dispatch}) {
         dispatch(reroute(ROUTES.LOGIN));
     };
 
+    const registerPage = () => {
+        dispatch(reroute(ROUTES.REGISTER));
+    };
+
     const findPage = () => {
         dispatch(reroute(ROUTES.FIND_PEOPLE));
     };
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
+
     const searchProps = {
         value, setValue,
         placeholder: 'Search Tags',
@@ -107,6 +110,7 @@ function Header({appState, profileState, dispatch}) {
             }
         }
     };
+
     const renderRightMostButton = () => {
         if (loggedIn && profileCompleted) {
             return (
@@ -130,8 +134,8 @@ function Header({appState, profileState, dispatch}) {
             );
         }
         return (
-            <div className={"main-button button"} onClick={loginPage}>
-                Login
+            <div className={"login"} onClick={isLoginPage ? registerPage : loginPage}>
+                {isLoginPage ? 'Register' : 'Login'}
             </div>
         );
     };
@@ -139,25 +143,35 @@ function Header({appState, profileState, dispatch}) {
     const renderRight = () => {
         if (loggedIn && !profileCompleted) return null;
         return (
-            <div className={"right"}>
-                <div className={'link about button'} onClick={findPage}>
-                    <HomeOutlinedIcon/>
+            <>
+                <div className={"home"} onClick={aboutPage}>
+                    What is {APP_NAME}?
                 </div>
-                <div className={"link home button"} onClick={aboutPage}>
-                    <InfoOutlinedIcon/>
-                </div>
-                <div className={"spacer"}/>
                 {renderRightMostButton()}
-            </div>
+            </>
         );
     };
 
     if (dontShow) return null;
 
+    const renderContent = () => {
+        if (preloadDone) {
+            return (
+                <>
+                    <div className={"left"}>
+                        <Icon className={'icon'} onClick={findPage}/>
+                        <Search {...searchProps}/>
+                    </div>
+                    {renderRight()}
+                </>
+            );
+        }
+        return null;
+    };
+
     return (
         <div className={"header fade-effect"}>
-            <Search {...searchProps}/>
-            {renderRight()}
+            {renderContent()}
         </div>
     );
 }

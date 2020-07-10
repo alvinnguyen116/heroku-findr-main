@@ -26,7 +26,7 @@ function FindPage({appState, profileState, dispatch}) {
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
     const {data} = appState.profiles;
-    const {searchTag, currentIndex, preloadDone, accessToken} = appState;
+    const {searchTag, currentIndex, preloadDone, inProgress} = appState;
     const sortedProfiles = data.map(profile => {
         const score = averageTagsScore(profile.tags, searchTag);
         return {...profile, score};
@@ -37,6 +37,7 @@ function FindPage({appState, profileState, dispatch}) {
     // COMPONENT STATE -------------------------------------------------------------------------------------------------
 
     const [menuOpen, setMenuOpen] = useState(true);
+    const [resizeActive, setResizeActive] = useState(false);
 
     // METHODS ---------------------------------------------------------------------------------------------------------
 
@@ -66,13 +67,6 @@ function FindPage({appState, profileState, dispatch}) {
 
     // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
 
-    useEffect(() => {
-        if (!searchTag && (data && !data.length)) {
-            dispatch(setPreloadDone(false));
-            debouncedProfileSearch({});
-        }
-    }, []);
-
     /**
      * @desc Whenever the current index changes,
      * scroll the selected element if needed.
@@ -93,6 +87,21 @@ function FindPage({appState, profileState, dispatch}) {
         };
     }, []);
 
+    let timeoutId;
+    useEffect(() => {
+        let mounted = true;
+        clearTimeout(timeoutId);
+        setResizeActive(true);
+
+        timeoutId = setTimeout(() => {
+            if (mounted) setResizeActive(false);
+        }, 2000);
+
+        return () => {
+            mounted = false;
+        }
+    }, [menuOpen]);
+
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
     const renderProfileButtons = (showDefault = false) => {
@@ -112,10 +121,10 @@ function FindPage({appState, profileState, dispatch}) {
         }
         return (
             <div className={"profile-buttons-container hide-scrollbar"}>
-                <Card elevation={1} className={"profile-buttons fade-in hide-scrollbar"}>
+                <Card elevation={1} className={"profile-buttons fade-in custom-scrollbar"}>
                     {profileButtons}
                 </Card>
-                <span className={"menu-button"} onClick={() => setMenuOpen(!menuOpen)}>
+                <span className={`menu-button ${resizeActive ? 'active' : ''}`} onClick={() => setMenuOpen(!menuOpen)}>
                     {menuOpen ? <ArrowBackIosRoundedIcon /> : <ArrowForwardIosRoundedIcon />}
                 </span>
             </div>
@@ -123,12 +132,12 @@ function FindPage({appState, profileState, dispatch}) {
         );
     };
 
-    if (preloadDone && ((loggedIn && profileCompleted) || !loggedIn)) {
+    if (preloadDone && ((loggedIn && profileCompleted) || !loggedIn) && !inProgress) {
         if (currentIndex < sortedProfiles.length && sortedProfiles[currentIndex]) {
             return (
                 <div className={"find-page"}>
                     {renderProfileButtons()}
-                    <Profile {...sortedProfiles[currentIndex]} className={"find-profile fade-in"}/>
+                    <Profile {...sortedProfiles[currentIndex]} className={`find-profile fade-in menu-${menuOpen ? "open" : "closed"}`}/>
                 </div>
             );
         }
@@ -141,7 +150,7 @@ function FindPage({appState, profileState, dispatch}) {
     return (
         <div className={"find-page default"}>
             {renderProfileButtons(true)}
-            <Profile {...INITIAL_STATE} className={"find-profile fade-in"}/>
+            <Profile {...INITIAL_STATE} className={`find-profile fade-in menu-${menuOpen ? "open" : "closed"}`}/>
         </div>
     );
 }

@@ -4,19 +4,24 @@ import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import LockOpenRoundedIcon from '@material-ui/icons/LockOpenRounded';
+import './password.scss';
+
 
 /**
  * @param helperText {string}
  * @param onChange {function}
  * @param className {string}
  * @param error {boolean}
+ * @param password {string}
  * @desc An input component for collecting a user's password.
  */
-function Password({helperText, onChange, className, error}) {
+function Password({placeholder = '', onChange, className, error = false, password = ''}) {
 
     // COMPONENT STATE -------------------------------------------------------------------------------------------------
 
     const [showPassword, setShowPassword] = useState(false);
+    const [isFocus, setIsFocus] = useState(false);
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
@@ -31,17 +36,26 @@ function Password({helperText, onChange, className, error}) {
         </InputAdornment>
     );
 
+    const startAdornment = (
+        <InputAdornment position="start">
+            <LockOpenRoundedIcon  style={{'fill' : password && error ? 'red' : (isFocus ? 'var(--primary-color)' : 'rgba(0,0,0,.54)')}}/>
+        </InputAdornment>
+    );
+
     const passwordProps = {
         className,
-        error,
+        error: !!password && error,
         onChange,
-        helperText: helperText,
+        placeholder: placeholder ? placeholder : 'Password',
+        onFocus: () => setIsFocus(true),
+        onBlur: () => setIsFocus(false),
         type: showPassword ? "text" : "password",
         label: "Password",
-        autoComplete: "current-password",
         InputProps: {
+            startAdornment,
             endAdornment,
-            spellCheck: false
+            spellCheck: false,
+            value: password
         }
     };
 

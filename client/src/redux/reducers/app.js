@@ -1,7 +1,8 @@
 import {
     APP, LOCAL_LOGIN, REGISTER,
     TOKEN_FETCH, LOGOUT, SEARCH_PROFILES,
-    SEARCH_GIF
+    SEARCH_GIF, GOOGLE_GET_TOKEN,
+    GOOGLE_GET_USER_INFO, INSTAGRAM_GET_TOKEN
 } from '../actions/actionTypes';
 
 import {modulo} from "../../utils";
@@ -10,6 +11,9 @@ const INITIAL_STATE = {
     inProgress: false,
     err: null,
     accessToken: '',
+    googleData: {},
+    instagramData: {},
+    googleUserInfo: {},
     route: '',
     snackbar: {
         message: '',
@@ -22,6 +26,7 @@ const INITIAL_STATE = {
         offset: 0,
         data: []
     },
+    preloadDone: false,
     profileCompleted: false,
     currentIndex: 0,
     searchTag: '',
@@ -37,6 +42,9 @@ export default (prevState = INITIAL_STATE, action) => {
         case LOGOUT.IN_PROGRESS:
         case SEARCH_PROFILES.IN_PROGRESS:
         case SEARCH_GIF.IN_PROGRESS:
+        case GOOGLE_GET_TOKEN.IN_PROGRESS:
+        case GOOGLE_GET_USER_INFO.IN_PROGRESS:
+        case INSTAGRAM_GET_TOKEN.IN_PROGRESS:
             return {
                 ...prevState,
                 err: null,
@@ -49,6 +57,7 @@ export default (prevState = INITIAL_STATE, action) => {
         case APP.SET_SEARCH:
         case APP.SET_PRELOAD_DONE:
         case APP.SET_START_SEARCH:
+        case APP.SET_IN_PROGRESS:
             return {
                 ...prevState,
                 ...action.data
@@ -59,13 +68,22 @@ export default (prevState = INITIAL_STATE, action) => {
         case SEARCH_PROFILES.SUCCESS:
         case SEARCH_GIF.SUCCESS:
         case APP.CURRENT_INDEX:
+        case GOOGLE_GET_TOKEN.SUCCESS:
+        case GOOGLE_GET_USER_INFO.SUCCESS:
+        case INSTAGRAM_GET_TOKEN.SUCCESS:
             return {
                 ...prevState,
                 inProgress: false,
                 ...action.data
             };
         case LOGOUT.SUCCESS:
-            return INITIAL_STATE;
+            return {
+                ...prevState,
+                inProgress: false,
+                accessToken: '',
+                googleData: {},
+                googleUserInfo: {}
+            };
         case APP.KEY_DOWN:
             return {
                 ...prevState,
@@ -82,6 +100,9 @@ export default (prevState = INITIAL_STATE, action) => {
         case LOGOUT.FAILURE:
         case SEARCH_PROFILES.FAILURE:
         case SEARCH_GIF.FAILURE:
+        case GOOGLE_GET_TOKEN.FAILURE:
+        case GOOGLE_GET_USER_INFO.FAILURE:
+        case INSTAGRAM_GET_TOKEN.FAILURE:
             return {
                 ...prevState,
                 inProgress: false,

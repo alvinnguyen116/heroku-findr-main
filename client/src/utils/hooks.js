@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {dispatchError} from "./index";
+import {useLocation} from "react-router-dom";
 import {useInView} from "react-intersection-observer";
 
 /**
@@ -80,8 +81,14 @@ function useVirtualScroll(url) {
 
     return [ref, imgLoaded];
 }
+
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
 export {
     useInput,
     useChips,
-    useVirtualScroll
+    useVirtualScroll,
+    useQuery
 }

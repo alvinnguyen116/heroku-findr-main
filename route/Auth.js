@@ -63,7 +63,7 @@ router.route('/token').get(async (req, res) => {
  * @desc Registers a new user if the email
  * does not already exists. Every new user
  * automatically gets an empty user profile.
- * Returns token (remove the need to login)
+ * Returns token (removes the need to login)
  */
 router.route('/register').post(async (req,res) => {
     try {
