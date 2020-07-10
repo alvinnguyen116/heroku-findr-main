@@ -62,7 +62,6 @@ function LoginPage({dispatch}) {
                     </div>
                 </form>
                 <GoogleAuth type={AUTH_TYPE.LOGIN} className={"google"}/>
-                <LinkInstagram/>
             </Paper>
         </div>
     );

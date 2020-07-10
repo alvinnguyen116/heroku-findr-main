@@ -171,7 +171,11 @@ function Header({appState, profileState, dispatch}) {
 
     return (
         <div className={"header fade-effect"}>
-            {renderContent()}
+            <div className={"left"}>
+                <Icon className={'icon'} onClick={findPage}/>
+                <Search {...searchProps}/>
+            </div>
+            {renderRight()}
         </div>
     );
 }
