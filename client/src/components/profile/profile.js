@@ -133,10 +133,8 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
         if (aboutMe) {
             const newAboutMe = [];
             aboutMe.split("\n").forEach((str, i) => {
-                if (str && str.trim()) {
-                    newAboutMe.push(<span key={i}>{str}</span>);
-                    newAboutMe.push(<br key={`${i}-break`}/>);
-                }
+                newAboutMe.push(<span key={i}>{str}</span>);
+                newAboutMe.push(<br key={`${i}-break`}/>);
             });
             return (
                 <Card elevation={3} className={`about-me`} style={cardStyle}>
@@ -162,8 +160,17 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
     };
 
     const renderProfilePicture = () => {
+        const onClick = () => dispatch(setBackdrop(
+            <img src={profilePicture.file} alt={"User profile"} className={`enlarge-img ${mode}`}/>
+        ));
         if (profilePicture && profilePicture.file) {
-            return (<img src={profilePicture.file} alt={"User profile"} className={mode}/>);
+            const props = {
+                onClick,
+                src: profilePicture.file,
+                alt: "User profile",
+                className: mode
+            };
+            return (<img {...props}/>);
         }
         return (<div className={"default"}/>);
     };

@@ -117,6 +117,14 @@
           padding: 4px;
           transition: padding .1s linear;
 
+          &:hover {
+            cursor: pointer;
+          }
+
+          &.enlarge {
+            --img-len: 300px;
+          }
+
           &.dark {
             background-color: rgba(255,255,255,.3 );
           }

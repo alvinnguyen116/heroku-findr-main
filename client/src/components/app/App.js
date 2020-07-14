@@ -148,7 +148,7 @@ function App({appState, profileState, dispatch}) {
     return (
         <>
             <div
-                className={`App ${backdropElement || backdropElement2 ? 'fixed-height' : ''}`}
+                className={`App`}
                 style={{visibility: componentDidMount ? 'visible' : 'hidden'}}>
                 <main>
                     <Header/>

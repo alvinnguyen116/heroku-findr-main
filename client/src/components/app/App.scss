@@ -108,6 +108,11 @@ html {
   z-index: 9999999;
 }
 
+.enlarge-img {
+  height: 300px;
+  border-radius: 50%;
+}
+
 .fade-in {
   @include fadeIn();
 }
