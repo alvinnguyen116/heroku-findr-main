@@ -16,6 +16,7 @@ import {PrivateRoute, getCookie, isEmptyProfile} from "../../utils";
 import {getProfile} from "../../redux/actions/profile";
 import Header from "../header/Header";
 import './App.scss';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 /**
  * @param dispatch {Function}
@@ -60,11 +61,12 @@ function App({appState, profileState, dispatch}) {
         }
     }, []);
 
-    useEffect(() => {
-        if (accessToken && preloadDone && !profileCompleted) {
-            dispatch(reroute(ROUTES.NEXT_STEPS));
-        }
-    }, [accessToken, preloadDone]);
+    // useEffect(() => { tends to be flakey
+    //     if (accessToken && preloadDone && !profileCompleted) {
+    //         dispatch(reroute(ROUTES.NEXT_STEPS));
+    //     }
+    // }, [accessToken, preloadDone]);
+
     /**
      * @desc If there is a snackbar message,
      * display it.
@@ -136,6 +138,12 @@ function App({appState, profileState, dispatch}) {
         return null;
     };
 
+    const renderSpinner = () => {
+        if (!preloadDone) {
+            return (<CircularProgress color="primary" className={"spinner"}/>);
+        }
+        return null;
+    };
 
     return (
         <>
@@ -179,6 +187,7 @@ function App({appState, profileState, dispatch}) {
             </Snackbar>
             {renderBackdropElement()}
             {renderBackdropElement2()}
+            {renderSpinner()}
         </>
     );
 }

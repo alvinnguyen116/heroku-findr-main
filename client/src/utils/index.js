@@ -109,7 +109,7 @@ function fileToBase64(file) {
     });
 }
 
-const debouncedProfileSearch = debounce(({tags = '', successCallback = () => {}}) => {
+const profileSearch = ({tags = '', successCallback = () => {}}) => {
     const {dispatch} = store;
     const failureCallback = () => {
         dispatch(fetchNewToken({successCallback: () => {
@@ -117,12 +117,12 @@ const debouncedProfileSearch = debounce(({tags = '', successCallback = () => {}}
         }}));
     };
     dispatch(searchProfiles({tags, successCallback, failureCallback}));
-}, 250);
+};
 
 const debouncedKeyPress = debounce(value => {
     const {dispatch} = store;
     dispatch(setSearch(value));
-    debouncedProfileSearch({tags: value});
+    profileSearch({tags: value});
 }, 250);
 
 function modulo(int,n) {
@@ -247,7 +247,7 @@ export {
     isEmptyProfile,
     bufferToBase64,
     fileToBase64,
-    debouncedProfileSearch,
+    profileSearch,
     debouncedGifSearch,
     debouncedKeyPress,
     modulo,

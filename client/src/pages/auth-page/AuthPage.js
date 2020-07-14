@@ -10,7 +10,7 @@ import {
     localLogin,
     reroute,
     instagramGetToken,
-    instagramGetUserInfo
+    instagramGetUserInfo, setPreloadDone
 } from "../../redux/actions/app";
 import './auth-page.scss';
 import {AUTH_TYPE, ROUTES, ACCOUNT_TYPE} from "../../utils/enums";
@@ -34,6 +34,8 @@ function AuthPage({type}) {
     useEffect(() => {
         const code = queryParams.get("code");
         let successCallback = () => {};
+        dispatch(setPreloadDone(false));
+        const setDone = () => dispatch(setPreloadDone(true));
         switch(type) {
             case ACCOUNT_TYPE.GOOGLE:
                 successCallback = () => {
@@ -42,19 +44,21 @@ function AuthPage({type}) {
                             const failureCallback = () => {
                                 dispatch(reroute(ROUTES.REGISTER));
                             };
-                            return dispatch(register({type, failureCallback})); // 3a) Register Google Account
+                            return dispatch(register({ // 3a) Register Google Account
+                                type, failureCallback,
+                                successCallback: setDone
+                            }));
                         }
                         const failureCallback = () => {
                             dispatch(reroute(ROUTES.LOGIN));
                         };
-                        return dispatch(localLogin({type, failureCallback})); // 3b) Login Google Account
+                        return dispatch(localLogin({
+                            type, failureCallback,
+                            successCallback: setDone
+                        })); // 3b) Login Google Account
                     }));
                 };
                 dispatch(googleGetToken({code, authType, successCallback})); // 1) Code --> Token
-                break;
-             case ACCOUNT_TYPE.IG:
-                 successCallback = () => dispatch(instagramGetUserInfo()); // 2) Token --> User Info
-                 dispatch(instagramGetToken({code, successCallback})); // 1) Code --> Token
                 break;
             default:
                 break;
@@ -63,7 +67,7 @@ function AuthPage({type}) {
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
-    return (<CircularProgress color="primary" className={"spinner"}/>);
+    return null;
 }
 
 export default AuthPage;

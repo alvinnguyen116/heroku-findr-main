@@ -8,7 +8,7 @@ import {
 import {bufferToBase64, fileToBase64} from "../../utils";
 import {SNACKBAR_SEVERITY} from '../../utils/enums';
 import {MainAPI} from "../../api/api";
-import {createError, snackbarMessage} from "./app";
+import {createError, snackbarMessage, setPreloadDone} from "./app";
 
 export function emptyProfile() {
     return {type: PROFILE.EMPTY};
@@ -141,10 +141,12 @@ export function profileUpdate({catchphrase, gifs, name, tags, aboutMe, theme, su
         if (!token) return dispatch(createError("No access token."));
 
         dispatch(initialProfileUpdate());
+        dispatch(setPreloadDone(false));
         MainAPI.updateProfile({...truthyProps, token}).then(() => {
             dispatch(successProfileUpdate());
             dispatch(snackbarMessage({message: 'Profile Update Successful', type: SNACKBAR_SEVERITY.SUCCESS}));
             successCallback && successCallback();
+            dispatch(setPreloadDone(true));
         }).catch(res => {
             failureCallback && failureCallback();
             dispatch(failureProfileUpdate(res));
@@ -194,10 +196,12 @@ export function updateProfilePicture({original, cropped, successCallback, failur
         if (!original && !cropped) return dispatch(failure('Original and Cropped are missing'));
 
         dispatch(initial());
+        dispatch(setPreloadDone(false));
         MainAPI.updateProfilePicture({...data, token}).then(async res => {
             dispatch(await success(res.data));
             dispatch(snackbarMessage({message: 'Profile Update Successful', type: SNACKBAR_SEVERITY.SUCCESS}));
             successCallback && successCallback();
+            dispatch(setPreloadDone(true));
         }).catch(res => {
             failureCallback && failureCallback();
             dispatch(failure(res));

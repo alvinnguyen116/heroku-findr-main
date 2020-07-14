@@ -30,7 +30,8 @@ function ProfilePage({profileState, appState, dispatch}) {
             </div>
         );
     }
-    return (<CircularProgress color={"primary"}/>);
+
+    return null;
 }
 
 const mapStateToProps = state => ({

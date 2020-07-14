@@ -56,7 +56,6 @@ export function setBackdrop2(backdropElement2) {
     }
 }
 
-
 export function setSearch(searchTag) {
     return {
         type: APP.SET_SEARCH,
@@ -275,7 +274,7 @@ export function searchProfiles({offset = 0, limit = 25, tags= '', successCallbac
     }
 }
 
-export function searchGifs({type, term, successCallback}) {
+export function searchGifs({type, term, successCallback = () => {}}) {
 
     const initial = () => ({
         type: SEARCH_GIF.IN_PROGRESS
