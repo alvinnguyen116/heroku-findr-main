@@ -1,32 +1,36 @@
-import React, {useState} from "react";
-import ChipInput from 'material-ui-chip-input'
-import {useChips} from '../../../utils/hooks';
+import React, {useEffect, useState} from 'react';
+import {useChips} from "../../../utils/hooks";
 import {dispatchError} from "../../../utils";
-import './step-four.scss';
+import ChipInput from "material-ui-chip-input";
+import './edit-tags.scss';
 
-/**
- * @param values {string[]}
- * @param setValues {function}
- * @desc The fourth step of a form for the Next Steps Page.
- * Collects the tags a user would like to associated with for
- * search.
- */
-function StepFour({values, setValues}) {
+function EditTags({tags, setTags, setError, handlers}) {
 
     // COMPONENT STATE -------------------------------------------------------------------------------------------------
 
     const [inputValue, setInputValue] = useState('');
-    const [onAdd, onDelete] = useChips({values, setValues, setInputValue});
+    const [onAdd, onDelete] = useChips({values: tags, setValues: setTags, setInputValue});
+
+    // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
+
+    useEffect(() => {
+        if (!tags || !tags.length) {
+            setError(true);
+        } else {
+            setError(false);
+        }
+    },[tags]);
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
     const chipProps = {
         className: "tags-search",
-        value: values,
+        value: tags,
         fullWidth: true,
         onAdd,
         onDelete,
         inputValue,
+        ...handlers,
         onUpdateInput: e => {
             try {
                 const {value} = e.target;
@@ -40,14 +44,10 @@ function StepFour({values, setValues}) {
     };
 
     return (
-        <div className={"step-five fade-in"}>
-            <h1 className={"steps-title"}>
-                 Interesting...<br/>
-                <strong>Which <em>#tags</em> should people use to find you?</strong> <br/>
-            </h1>
+        <div className={"edit-tags"}>
             <ChipInput {...chipProps} placeholder={"Press 'Enter' after each tag"}/>
         </div>
     );
 }
 
-export default StepFour;
+export default EditTags;

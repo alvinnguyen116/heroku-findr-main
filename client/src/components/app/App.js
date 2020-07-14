@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {Switch, useHistory, Route} from 'react-router-dom';
+import {Switch, useHistory, Route, useLocation} from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import FindPage from "../../pages/find-page/FindPage";
@@ -10,8 +10,8 @@ import RegisterPage from "../../pages/register-page/RegisterPage";
 import ProfilePage from "../../pages/profile-page/profile-page";
 import AuthPage from "../../pages/auth-page/AuthPage";
 import AboutPage from "../../pages/about-page/AboutPage";
-import {fetchNewToken, setBackdrop, reroute, setPreloadDone} from "../../redux/actions/app";
-import {ROUTES, SNACKBAR_SEVERITY, COOKIE, ACCOUNT_TYPE} from '../../utils/enums';
+import {fetchNewToken, setBackdrop, reroute, setPreloadDone, setBackdrop2} from "../../redux/actions/app";
+import {ROUTES, COOKIE, ACCOUNT_TYPE} from '../../utils/enums';
 import {PrivateRoute, getCookie, isEmptyProfile} from "../../utils";
 import {getProfile} from "../../redux/actions/profile";
 import Header from "../header/Header";
@@ -38,9 +38,10 @@ function App({appState, profileState, dispatch}) {
 
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
-    const {snackbar, route, accessToken, backdropElement, preloadDone} = appState;
+    const {snackbar, route, accessToken, backdropElement, backdropElement2, preloadDone} = appState;
     const profileCompleted = !isEmptyProfile(profileState);
     const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true";
+    const location = useLocation();
 
     // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
 
@@ -80,9 +81,26 @@ function App({appState, profileState, dispatch}) {
         route && history.push(route);
     }, [route]);
 
+    /**
+     * @desc If the route changes, programmatically
+     * push route to history.
+     */
+    useEffect(() => {
+        location && location.pathname && dispatch(reroute(location.pathname));
+    }, [location]);
+
     // HANDLERS --------------------------------------------------------------------------------------------------------
 
     const handleClose = () => setSnackbarOpen(false);
+
+    /**
+     * @desc Close the backdrop on click (IGNORE CHILDREN CLICK)
+     */
+    const onClick = backdrop => e => {
+        if (e.currentTarget === e.target) {
+            dispatch(backdrop(null));
+        }
+    };
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
@@ -92,25 +110,14 @@ function App({appState, profileState, dispatch}) {
             horizontal: "center"
         },
         open: snackbarOpen,
-        autoHideDuration: snackbar.type === SNACKBAR_SEVERITY.SUCCESS ? 1000 : 3000,
+        autoHideDuration: 3000,
         onClose: handleClose
     };
 
     const renderBackdropElement = () => {
-        /**
-         * @desc Close the backdrop on click,
-         * but do not close if click is on backdrop's
-         * children.
-         */
-        const onClick = e => {
-            if (e.currentTarget === e.target) {
-                dispatch(setBackdrop(null));
-            }
-        };
-
         if (backdropElement) {
             return (
-                <div className={"backdrop"} onClick={onClick}>
+                <div className={"backdrop"} onClick={onClick(setBackdrop)}>
                     {backdropElement}
                 </div>
             );
@@ -118,9 +125,23 @@ function App({appState, profileState, dispatch}) {
         return null;
     };
 
+    const renderBackdropElement2 = () => {
+        if (backdropElement2) {
+            return (
+                <div className={"backdrop two"} onClick={onClick(setBackdrop2)}>
+                    {backdropElement2}
+                </div>
+            );
+        }
+        return null;
+    };
+
+
     return (
         <>
-            <div className="App" style={{visibility: componentDidMount ? 'visible' : 'hidden'}}>
+            <div
+                className={`App ${backdropElement || backdropElement2 ? 'fixed-height' : ''}`}
+                style={{visibility: componentDidMount ? 'visible' : 'hidden'}}>
                 <main>
                     <Header/>
                     <Switch>
@@ -157,6 +178,7 @@ function App({appState, profileState, dispatch}) {
                 </MuiAlert>
             </Snackbar>
             {renderBackdropElement()}
+            {renderBackdropElement2()}
         </>
     );
 }

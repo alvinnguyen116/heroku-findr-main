@@ -12,6 +12,14 @@ export function createError(err) {
     };
 }
 
+export function setKeyboardShortcuts(keyboardShortcuts) {
+    return {
+        type: APP.SET_KEYBOARD_SHORTCUTS,
+        data: {keyboardShortcuts}
+    };
+}
+
+
 export function setInProgress(inProgress) {
     return {
         type: APP.SET_IN_PROGRESS,
@@ -41,6 +49,14 @@ export function setBackdrop(backdropElement) {
     }
 }
 
+export function setBackdrop2(backdropElement2) {
+    return {
+        type: APP.OPEN_BACKDROP_2,
+        data: {backdropElement2}
+    }
+}
+
+
 export function setSearch(searchTag) {
     return {
         type: APP.SET_SEARCH,
@@ -48,16 +64,11 @@ export function setSearch(searchTag) {
     }
 }
 
-export function keyUp() {
+export function setCurrentIndex(currentIndex) {
     return {
-        type: APP.KEY_UP
-    };
-}
-
-export function keyDown() {
-    return {
-        type: APP.KEY_DOWN
-    };
+        type: APP.SET_CURRENT_INDEX,
+        data: {currentIndex}
+    }
 }
 
 export function setIndex(currentIndex) {

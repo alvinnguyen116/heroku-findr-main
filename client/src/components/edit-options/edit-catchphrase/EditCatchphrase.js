@@ -1,22 +1,25 @@
-import React from "react";
+import React, {useEffect} from 'react';
 import TextField from "@material-ui/core/TextField";
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import CloseIcon from '@material-ui/icons/Close';
-import {FONTS} from '../../../utils/enums';
-import './step-five.scss';
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import {FONTS} from "../../../utils/enums";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import './edit-catchphrase.scss';
 
-/**
- * @param quote {string}
- * @param setQuote {function}
- * @param font {string}
- * @param setFont {function}
- * @desc The fifth step of a form for the Next Steps Page.
- * Collects the user quote information and font preference.
- */
-function StepFive({quote,setQuote, font, setFont}) {
+function EditCatchphrase({quote, setQuote, font, setFont, handlers, setError}) {
+
+    // SIDE EFFECTS ----------------------------------------------------------------------------------------------------
+
+    useEffect(() => {
+        if (!quote) {
+            setError(true);
+        } else {
+            setError(false);
+        }
+    }, [quote]);
+
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
@@ -43,13 +46,15 @@ function StepFive({quote,setQuote, font, setFont}) {
         InputProps: {
             spellCheck: false,
             value: quote,
-            endAdornment: renderEndAdornment()
+            endAdornment: renderEndAdornment(),
+            ...handlers
         }
     };
 
     const selectProps = {
         value: font,
-        onChange: e => setFont(e.target.value)
+        onChange: e => setFont(e.target.value),
+        ...handlers
     };
 
     /**
@@ -68,11 +73,7 @@ function StepFive({quote,setQuote, font, setFont}) {
     };
 
     return (
-        <div className={"step-five fade-in"}>
-            <h1 className={"steps-title"}>
-                Nice Pic <span role={"img"} aria-label={"Face with glasses"}>&#128526;</span><br/>
-                <strong>What is your favorite quote?</strong>
-            </h1>
+        <div className={"edit-catchphrase"}>
             <div className={"input-area"}>
                 <TextField {...inputProps}/>
                 <Select {...selectProps}>
@@ -86,7 +87,7 @@ function StepFive({quote,setQuote, font, setFont}) {
             </div>
             {renderPreview()}
         </div>
-    );
+    )
 }
 
-export default StepFive;
+export default EditCatchphrase;

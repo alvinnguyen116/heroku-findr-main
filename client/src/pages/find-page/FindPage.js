@@ -4,9 +4,9 @@ import ProfileButton from "./profile-button/profile-button";
 import Card from "@material-ui/core/Card";
 import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
 import ArrowForwardIosRoundedIcon from "@material-ui/icons/ArrowForwardIosRounded";
-import {isEmptyProfile, averageTagsScore, debouncedProfileSearch, getCookie} from "../../utils";
+import {isEmptyProfile, averageTagsScore, debouncedProfileSearch, getCookie, modulo} from "../../utils";
 import {COOKIE, ROUTES} from '../../utils/enums';
-import {reroute, keyDown, keyUp, setIndex, setPreloadDone} from "../../redux/actions/app";
+import {reroute, setCurrentIndex, setIndex, setPreloadDone} from "../../redux/actions/app";
 import {INITIAL_STATE} from "../../redux/reducers/profile";
 import Profile from "../../components/profile/profile";
 import './find-page.scss';
@@ -26,7 +26,7 @@ function FindPage({appState, profileState, dispatch}) {
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
     const {data} = appState.profiles;
-    const {searchTag, currentIndex, preloadDone, inProgress} = appState;
+    const {searchTag, currentIndex, preloadDone, inProgress, keyboardShortcuts} = appState;
     const sortedProfiles = data.map(profile => {
         const score = averageTagsScore(profile.tags, searchTag);
         return {...profile, score};
@@ -43,13 +43,14 @@ function FindPage({appState, profileState, dispatch}) {
 
     function keydownListener(e) {
         const {keyCode} = e;
+        if (!keyboardShortcuts) return;
         switch(keyCode) {
             case 37:
                 setMenuOpen(false);
                 e.preventDefault();
                 break;
             case 38:
-                dispatch(keyUp());
+                dispatch(setCurrentIndex(modulo(currentIndex - 1, data.length)));
                 e.preventDefault();
                 break;
             case 39:
@@ -57,7 +58,7 @@ function FindPage({appState, profileState, dispatch}) {
                 e.preventDefault();
                 break;
             case 40:
-                dispatch(keyDown());
+                dispatch(setCurrentIndex(modulo(currentIndex + 1, data.length)));
                 e.preventDefault();
                 break;
             default:
@@ -80,12 +81,15 @@ function FindPage({appState, profileState, dispatch}) {
      * @desc Key board shortcuts
      */
     useEffect(() => {
-        document.addEventListener('keydown', keydownListener, true);
+        if (data.length) {
+            document.removeEventListener('keydown', keydownListener, true);
+            document.addEventListener('keydown', keydownListener, true);
+        }
 
         return () => {
             document.removeEventListener('keydown', keydownListener, true);
         };
-    }, []);
+    }, [currentIndex, data.length, keyboardShortcuts]);
 
     let timeoutId;
     useEffect(() => {

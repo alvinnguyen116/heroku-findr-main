@@ -47,7 +47,6 @@ export default (prevState = INITIAL_STATE, action) => {
                 err: null,
                 inProgress: true
             };
-        case UPDATE_PROFILE_PICTURE.SUCCESS:
         case PROFILE_UPDATE.SUCCESS:
         case GET_MY_PROFILE.SUCCESS:
         case GET_PROFILE_PICTURE.SUCCESS:
@@ -55,6 +54,15 @@ export default (prevState = INITIAL_STATE, action) => {
                 ...prevState,
                 inProgress: false,
                ...action.data
+            };
+        case UPDATE_PROFILE_PICTURE.SUCCESS:
+            return {
+                ...prevState,
+                inProgress: false,
+                profilePicture: {
+                    ...prevState.profilePicture, // include previous state in update
+                    ...action.profilePicture // overrides previous state if exists
+                }
             };
         case PROFILE.EMPTY:
             return INITIAL_STATE;

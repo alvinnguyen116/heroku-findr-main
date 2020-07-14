@@ -4,7 +4,7 @@ import {useLocation} from 'react-router-dom';
 import {connect} from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import Search from '../input/search/search';
-import {logout, reroute, setInProgress} from '../../redux/actions/app';
+import {logout, reroute, setInProgress, setKeyboardShortcuts} from '../../redux/actions/app';
 import {COOKIE, ROUTES, APP_NAME} from '../../utils/enums';
 import {isEmptyProfile, debouncedKeyPress, dispatchError, getCookie} from "../../utils";
 import Icon from '../../assets/icon';
@@ -63,13 +63,15 @@ function Header({appState, profileState, dispatch}) {
     }, [profilePicture.cropped]);
 
     useEffect(() => {
-        dispatch(setInProgress(true));
-        try {
-            debouncedKeyPress(value);
-        } catch (err) {
-            dispatchError(err);
+        if (location.pathname === ROUTES.FIND_PEOPLE) {
+            dispatch(setInProgress(true));
+            try {
+                debouncedKeyPress(value);
+            } catch (err) {
+                dispatchError(err);
+            }
         }
-    }, [value]);
+    }, [value, location.pathname]);
 
     // HANDLERS --------------------------------------------------------------------------------------------------------
 

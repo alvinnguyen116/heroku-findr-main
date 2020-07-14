@@ -2,8 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Profile from "../../components/profile/profile";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import './profile-page.scss';
 import {isEmptyProfile} from "../../utils";
+import './profile-page.scss';
 
 function ProfilePage({profileState, appState, dispatch}) {
 
@@ -22,7 +22,6 @@ function ProfilePage({profileState, appState, dispatch}) {
         },
         edit: true
     };
-
 
     if (profileCompleted && preloadDone) {
         return (

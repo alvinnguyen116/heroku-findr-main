@@ -289,11 +289,10 @@ function NextStepsPage({profileState, appState, dispatch}) {
         return (<Profile {...props}/>);
     }, [currentStep, theme]);
 
-    //todo: optional ig step
     if (preloadDone && !profileCompleted) {
         return (
             <div className={'next-steps-page'}>
-                {memoizedProfile()}
+                {memoizedProfile}
                 <Paper elevation={3} className={"steps fade-in paper"}>
                     <LinearProgress {...progressProps}/>
                     <div className={"buttons"}>

@@ -1,7 +1,9 @@
-.MuiInput-input {
-  background-color: unset !important;
-}
+.email {
+  label {
+    display: none !important;
+  }
 
-label {
-  display: none !important;
+  .MuiInput-input {
+    background-color: unset !important;
+  }
 }

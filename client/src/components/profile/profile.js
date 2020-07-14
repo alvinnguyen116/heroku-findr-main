@@ -4,6 +4,11 @@ import Gif from '../gif/gif';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
+import CreateIcon from "@material-ui/icons/Create";
+import Button from "@material-ui/core/Button";
+import {setBackdrop} from "../../redux/actions/app";
+import EditOptions from "../edit-options/EditOptions";
+import store from '../../redux/store';
 import './profile.scss';
 
 function Profile({className, catchphrase, profilePicture, gifs, name, tags, aboutMe, theme, edit = false}) {
@@ -27,6 +32,7 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
             [style] : color
         }
     }
+    const {dispatch} = store;
 
     // REFERENCES ------------------------------------------------------------------------------------------------------
 
@@ -62,11 +68,14 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
         };
 
         if (gifs && gifs.length) {
-            const gifsComponent = gifs.map(gif =>
-                <Card varaint="outlined" key={gif.url} className={"gif"}>
-                    <Gif gifObj={gif} FIXED_HEIGHT={150}/>
-                </Card>
-            );
+            const gifsComponent = gifs.map(gif => {
+                const onClick = () => dispatch(setBackdrop(<Gif gifObj={gif} FIXED_HEIGHT={300}/>));
+                return (
+                    <Card varaint="outlined" key={gif.url} className={"gif"}>
+                        <Gif gifObj={gif} FIXED_HEIGHT={150} onClick={onClick}/>
+                    </Card>
+                );
+            });
             const hiddenStyle = {visibility: 'hidden'};
             let leftStyle, rightStyle = {};
 
@@ -166,6 +175,25 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
         return (<div className={"name"}/>);
     };
 
+    const renderEditButton = () => {
+        if (edit) {
+            const props = {
+                variant: "contained",
+                onClick: () => {
+                    dispatch(setBackdrop(<EditOptions/>));
+                },
+                className: 'edit-btn'
+            };
+            return (
+                <Button {...props}>
+                    <CreateIcon/>
+                    <span>Edit Profile</span>
+                </Button>
+            );
+        }
+        return null;
+    };
+
     // COMPONENT SETUP -------------------------------------------------------------------------------------------------
 
     let middleSectionClassName = 'middle-section';
@@ -181,6 +209,7 @@ function Profile({className, catchphrase, profilePicture, gifs, name, tags, abou
                     {renderQuote()}
                 </div>
                 {renderTags()}
+                {renderEditButton()}
             </Card>
             {renderAboutMe()}
             {renderGifs()}

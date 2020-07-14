@@ -2,15 +2,19 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
 import TextField from "@material-ui/core/TextField";
+import {setKeyboardShortcuts} from "../../../redux/actions/app";
+import store from '../../../redux/store';
 import './search.scss';
 
 /**
- * @param value  {string}
- * @param setValue {function}
  * @desc A controlled input component for displaying
  * a search bar.
  */
 function Search({value, setValue, handlers = {}, placeholder = 'Search'}) {
+
+    // CONSTANTS -------------------------------------------------------------------------------------------------------
+
+    const {dispatch} = store;
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
@@ -30,6 +34,8 @@ function Search({value, setValue, handlers = {}, placeholder = 'Search'}) {
             value,
             spellCheck: false,
             startAdornment,
+            onFocus: () => dispatch(setKeyboardShortcuts(false)),
+            onBlur: () => dispatch(setKeyboardShortcuts(true)),
             ...handlers
         }
     };

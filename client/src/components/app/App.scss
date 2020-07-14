@@ -17,6 +17,12 @@ html {
 }
 
 .App {
+
+  &.fixed-height {
+    height: 100vh;
+    overflow: hidden;
+  }
+
   main {
     min-height: 100vh;
     display: flex;
@@ -82,12 +88,17 @@ html {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.5);
+
+  &.two {
+    z-index: 4;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
 }
 
 .fade-in {

@@ -6,8 +6,9 @@ import {
     PROFILE,
 } from "./actionTypes";
 import {bufferToBase64, fileToBase64} from "../../utils";
+import {SNACKBAR_SEVERITY} from '../../utils/enums';
 import {MainAPI} from "../../api/api";
-import {createError} from "./app";
+import {createError, snackbarMessage} from "./app";
 
 export function emptyProfile() {
     return {type: PROFILE.EMPTY};
@@ -107,7 +108,19 @@ export function getProfilePictures({original: originalId, cropped: croppedId, su
     }
 }
 
-export function profileUpdate({catchphrase, gifs, name, tags, aboutMe, theme, successCallback}) {
+/**
+ * @desc Updates a subsection of the profile if the value is truthy.
+ */
+export function profileUpdate({catchphrase, gifs, name, tags, aboutMe, theme, successCallback = () => {},
+                              failureCallback = () => {}}) {
+
+    const truthyProps = {};
+    if (catchphrase) truthyProps['catchphrase'] = catchphrase;
+    if (gifs && gifs.length) truthyProps['gifs'] = gifs;
+    if (name && name.first && name.last) truthyProps['name'] = name;
+    if (tags && tags.length) truthyProps['tags'] = tags;
+    if (aboutMe) truthyProps['aboutMe'] = aboutMe;
+    if (theme) truthyProps['theme'] = theme;
 
     const initialProfileUpdate = () => ({
         type: PROFILE_UPDATE.IN_PROGRESS
@@ -115,7 +128,7 @@ export function profileUpdate({catchphrase, gifs, name, tags, aboutMe, theme, su
 
     const successProfileUpdate = () => ({
         type: PROFILE_UPDATE.SUCCESS,
-        data: {catchphrase, gifs, name, tags, aboutMe, theme}
+        data: truthyProps
     });
 
     const failureProfileUpdate = err => ({
@@ -128,10 +141,12 @@ export function profileUpdate({catchphrase, gifs, name, tags, aboutMe, theme, su
         if (!token) return dispatch(createError("No access token."));
 
         dispatch(initialProfileUpdate());
-        MainAPI.updateProfile({catchphrase, gifs, name, tags, aboutMe, theme, token}).then(() => {
+        MainAPI.updateProfile({...truthyProps, token}).then(() => {
             dispatch(successProfileUpdate());
+            dispatch(snackbarMessage({message: 'Profile Update Successful', type: SNACKBAR_SEVERITY.SUCCESS}));
             successCallback && successCallback();
         }).catch(res => {
+            failureCallback && failureCallback();
             dispatch(failureProfileUpdate(res));
         });
     }
@@ -143,34 +158,45 @@ export function updateProfilePicture({original, cropped, successCallback, failur
         type: UPDATE_PROFILE_PICTURE.IN_PROGRESS
     });
 
-    const success = async ({original: originalId, cropped: croppedId}) => ({
-        type: UPDATE_PROFILE_PICTURE.SUCCESS,
-        data: {
-            profilePicture: {
-                original: {
-                    file: await fileToBase64(original),
-                    id: originalId
-                },
-                cropped: {
-                    file: await fileToBase64(cropped),
-                    id: croppedId
-                }
+    const success = async ({original: originalId, cropped: croppedId}) => {
+        const profilePicture = {};
+        if (originalId && original) {
+            profilePicture.original = {
+                file: await fileToBase64(original),
+                id: originalId
             }
         }
-    });
+        if (croppedId && cropped) {
+            profilePicture.cropped = {
+                file: await fileToBase64(cropped),
+                id: croppedId
+            }
+        }
+
+        return {
+            type: UPDATE_PROFILE_PICTURE.SUCCESS,
+            profilePicture
+        };
+    };
 
     const failure = err => ({
         type: UPDATE_PROFILE_PICTURE.FAILURE,
         err
     });
 
-    return  (dispatch, getState) => {
+    return (dispatch, getState) => {
         const {accessToken : token} = getState().app;
         if (!token) return dispatch(createError("No access token."));
 
+        const data = {}; // only update if property is truthy
+        if (original) data['original'] = original;
+        if (cropped) data['cropped'] = cropped;
+        if (!original && !cropped) return dispatch(failure('Original and Cropped are missing'));
+
         dispatch(initial());
-        MainAPI.updateProfilePicture({original, cropped, token}).then(async res => {
+        MainAPI.updateProfilePicture({...data, token}).then(async res => {
             dispatch(await success(res.data));
+            dispatch(snackbarMessage({message: 'Profile Update Successful', type: SNACKBAR_SEVERITY.SUCCESS}));
             successCallback && successCallback();
         }).catch(res => {
             failureCallback && failureCallback();

@@ -29,7 +29,7 @@ function Email({className, error, onChange, email=''}) {
     );
 
     const emailProps = {
-        className,
+        className: `${className} email`,
         type: "email",
         label: "Email",
         placeholder: 'Email',

@@ -11,12 +11,11 @@ import Gif from '../../../components/gif/gif';
 import './step-six.scss';
 
 /**
- * @param gifs {object[]}
- * @param setGifs {function}
  * @desc The sixth step of a form for the Next Steps Page.
  * Collect the user's favorite gifs and stickers.
  */
-function StepSix({appState, gifs, setGifs, searchValue, setSearchValue, dispatch}) {
+function StepSix({appState, gifs, setGifs, searchValue, setSearchValue, isProfileUpdate = false,
+                     className = ''}) {
 
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
@@ -125,12 +124,20 @@ function StepSix({appState, gifs, setGifs, searchValue, setSearchValue, dispatch
         placeholder: 'Search GIFs'
     };
 
+    const renderNextStepsTitle = () => {
+        if (!isProfileUpdate) {
+            return (
+                <h1 className={"steps-title"}>
+                    You can find me at <em>#Sentient website</em>. <br/>
+                    <strong>Choose 4 GIFs.</strong> <br/>
+                </h1>
+            );
+        }
+        return null;
+    };
     return (
-      <div className={"step-six fade-in"}>
-          <h1 className={"steps-title"}>
-              You can find me at <em>#Sentient website</em>. <br/>
-              <strong>Choose 4 GIFs.</strong> <br/>
-          </h1>
+      <div className={`step-six fade-in ${className}`}>
+          {renderNextStepsTitle()}
           <div className={"user-input"}>
               <div className={"gif-or-sticker"} style={bgStyle}>
                   <Search {...searchProps}/>

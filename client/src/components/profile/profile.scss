@@ -64,6 +64,31 @@
       background-color: var(--default-text-color) !important;
     }
 
+    .edit-btn {
+      --len: 1em;
+      padding: 6px 10px;
+      background-color: white;
+      text-transform: capitalize;
+      position: absolute;
+      top: var(--len);
+      right: var(--len);
+      z-index: 9999;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      svg {
+        margin-right: 8px;
+        font-size: 16px;
+      }
+
+      span {
+        font-weight: bold;
+        font-size: 12px;
+      }
+    }
+
     .name {
       margin-top: 16px;
       font-size: 1.5em;
@@ -170,3 +195,4 @@
     }
   }
 }
+

@@ -51,9 +51,8 @@
       border-radius: 0 50% 50% 0;
       z-index: 9999;
       transition: opacity .2s linear;
-      box-shadow: 0 2px 1px -1px rgba(0,0,0,0.2),
-                  0px 1px 1px -1px rgba(0,0,0,0.14),
-                  0px 1px 3px -1px rgba(0,0,0,0.12);
+      border: 1px solid rgba(0,0,0,.12);
+      border-left: none;
 
       &.active {
         opacity: 1;

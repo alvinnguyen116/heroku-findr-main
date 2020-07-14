@@ -1,0 +1,45 @@
+.edit-catchphrase {
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  overflow: hidden;
+
+  .steps-title em {
+    color: #e91e63;
+    text-transform: capitalize;
+  }
+
+  .input-area {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-gap: 2em;
+
+    .quote-field {
+      width: 100%;
+    }
+  }
+
+  .quote-preview {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+
+    .quote {
+      overflow-wrap: anywhere;
+      text-align: center;
+    }
+
+    .name {
+      font-size: 2em;
+      text-transform: capitalize;
+      white-space: nowrap;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      line-height: 1.5em;
+    }
+  }
+}

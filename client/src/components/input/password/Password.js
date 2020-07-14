@@ -43,7 +43,7 @@ function Password({placeholder = '', onChange, className, error = false, passwor
     );
 
     const passwordProps = {
-        className,
+        className: `password ${className}`,
         error: !!password && error,
         onChange,
         placeholder: placeholder ? placeholder : 'Password',

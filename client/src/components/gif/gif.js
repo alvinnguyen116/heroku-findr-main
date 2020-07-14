@@ -32,8 +32,7 @@ function Gif({gifObj, onClick = () => {}, FIXED_WIDTH, FIXED_HEIGHT}) {
     // HANDLERS --------------------------------------------------------------------------------------------------------
 
     /**
-     * @desc Only call the onClick function
-     * if the image has loaded.
+     * @desc Only call the onClick function if the image has loaded.
      */
     const handleOnClick = () => imgLoaded && onClick();
 

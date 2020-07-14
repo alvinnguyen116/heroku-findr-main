@@ -1,0 +1,15 @@
+.edit-tags {
+  width: 50vw;
+
+  .tags-search {
+
+    .MuiChip-label {
+      overflow: visible;
+      font-style: italic;
+
+      &::before {
+        content: "#";
+      }
+    }
+  }
+}

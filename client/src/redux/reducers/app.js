@@ -14,12 +14,14 @@ const INITIAL_STATE = {
     googleData: {},
     instagramData: {},
     googleUserInfo: {},
+    keyboardShortcuts: true,
     route: '',
     snackbar: {
         message: '',
         type: ''
     },
     backdropElement: null,
+    backdropElement2: null,
     profiles: {
         total: 0,
         limit: 0,
@@ -54,10 +56,13 @@ export default (prevState = INITIAL_STATE, action) => {
         case APP.SNACKBAR_MESSAGE:
         case APP.REROUTE:
         case APP.OPEN_BACKDROP:
+        case APP.OPEN_BACKDROP_2:
         case APP.SET_SEARCH:
         case APP.SET_PRELOAD_DONE:
         case APP.SET_START_SEARCH:
         case APP.SET_IN_PROGRESS:
+        case APP.SET_CURRENT_INDEX:
+        case APP.SET_KEYBOARD_SHORTCUTS:
             return {
                 ...prevState,
                 ...action.data
@@ -83,16 +88,6 @@ export default (prevState = INITIAL_STATE, action) => {
                 accessToken: '',
                 googleData: {},
                 googleUserInfo: {}
-            };
-        case APP.KEY_DOWN:
-            return {
-                ...prevState,
-                currentIndex: modulo(prevState.currentIndex + 1, prevState.profiles.data.length || 1)
-            };
-        case APP.KEY_UP:
-            return {
-                ...prevState,
-                currentIndex: modulo(prevState.currentIndex - 1, prevState.profiles.data.length || 1)
             };
         case LOCAL_LOGIN.FAILURE:
         case REGISTER.FAILURE:

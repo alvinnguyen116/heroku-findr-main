@@ -3,7 +3,7 @@ import {THEMES} from '../../../utils/theme';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import './step-seven.scss';
 
-function StepSeven({theme, setTheme}) {
+function StepSeven({theme, setTheme, isProfileUpdate = false, className = ''}) {
 
     const lightThemes = [];
     const darkThemes = [];
@@ -35,14 +35,23 @@ function StepSeven({theme, setTheme}) {
         });
     });
 
+    const renderNextStepsTitle = () => {
+        if (!isProfileUpdate) {
+            return (
+                <h1 className={"steps-title"}>
+                    OK, last question! <br/>
+                    <strong>
+                        What is your favorite color? <span role={"img"} aria-label={"color palette emoji"}>&#127912;</span>
+                    </strong>
+                </h1>
+            );
+        }
+        return null;
+    };
+
     return (
-      <div className={"step-seven fade-in"}>
-          <h1 className={"steps-title"}>
-              OK, last question! <br/>
-              <strong>
-                  What is your favorite color? <span role={"img"} aria-label={"color palette emoji"}>&#127912;</span>
-              </strong>
-          </h1>
+      <div className={`step-seven fade-in ${className}`}>
+          {renderNextStepsTitle()}
           <div className={'color-picker'}>
               <div className={"theme light"}>
                   {lightThemes}

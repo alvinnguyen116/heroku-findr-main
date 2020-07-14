@@ -1,0 +1,42 @@
+.edit-options {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+
+    .back-btn, .update-btn {
+      width: fit-content;
+      color: white;
+    }
+  }
+
+
+  &.show-options .main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: .5em;
+    padding: 2em;
+
+    .option-btn {
+      padding: 1em;
+      background-color: white;
+      border: 1px solid #4285f4;
+      text-align: center;
+      text-transform: capitalize;
+
+      color: #4285f4;
+
+      &:hover, &.hover {
+        background-color: #4285f4;
+        color: white;
+      }
+    }
+  }
+
+  .main {
+    padding: 2em;
+  }
+}

@@ -3,6 +3,7 @@ import UserProfile from '../model/UserProfile';
 import upload from '../middleware/upload';
 import {safeCastOptions} from '../util/index';
 import {authJWT} from '../middleware/passport';
+import profile from "../client/src/redux/reducers/profile";
 
 const router = Router();
 
@@ -97,15 +98,26 @@ router.route("/update").post(authJWT, async (req,res) => {
 router.route('/update/picture').post(authJWT, upload.fields([{name: 'original'}, {name: 'cropped'}]), (req,res) => {
     try {
         const {original, cropped} = req.files; // req.files set by Multer
-        if (!original || !original.length) return res.status(400).json({err: 'Missing original file'});
-        if (!cropped || !cropped.length) return res.status(400).json({err: 'Missing cropped file'});
-        const profilePicture = {original: original[0].id, cropped: cropped[0].id};
+        const profilePicture = {};
 
-        // Attempt to update the user's profile
-        UserProfile.findByIdAndUpdate(req.user.userProfile.id, {profilePicture}, err => {
+        // Update ID if truthy
+        if (original) profilePicture['original'] = original[0].id;
+        if (cropped) profilePicture['cropped'] = cropped[0].id;
+
+        const callback = err => {
             if (err) return res.status(400).json({err});
-            res.status(200).send(profilePicture);
-        });
+            return res.status(200).send(profilePicture);
+        };
+
+        if (profilePicture.original && profilePicture.cropped) { // update both
+            return UserProfile.findByIdAndUpdate(req.user.userProfile.id, {profilePicture}, callback);
+        } else if (profilePicture.cropped) { // update cropped photo
+            return UserProfile.findByIdAndUpdate(req.user.userProfile.id, {$set: {
+                'profilePicture.cropped': profilePicture.cropped
+            }}, callback);
+        }
+
+        return res.status(400).json({err: 'Missing at least cropped field from request.'});
     } catch (e) {
         res.status(500).json({err: 'Failed to update Profile.'});
     }

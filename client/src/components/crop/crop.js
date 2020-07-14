@@ -60,9 +60,7 @@ function Crop({setBlob, src}) {
 
             // convert to blob and save
             canvas.toBlob(blob => {
-                if (blob) {
-                    setBlob(blob);
-                }
+                blob && setBlob(blob);
             }, 'image/jpeg');
         }
     };
