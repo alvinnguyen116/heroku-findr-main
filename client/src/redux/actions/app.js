@@ -110,12 +110,10 @@ export function localLogin({email, password, type = ACCOUNT_TYPE.LOCAL, successC
     return (dispatch, getState) => {
         dispatch(initial());
         const [localEmail, localPass] = setUpUserInfo({getState, password, email, type, failure, dispatch});
-        dispatch(setPreloadDone(false));
         AuthAPI.login({email: localEmail, password: localPass}).then(res => {
             dispatch(success(res.data));
             dispatch(getProfile( () => {
                 dispatch(reroute(ROUTES.FIND_PEOPLE));
-                dispatch(setPreloadDone(true));
             }));
             successCallback && successCallback();
         }).catch(res => {

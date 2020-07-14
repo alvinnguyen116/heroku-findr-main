@@ -9,8 +9,6 @@ import {
     register,
     localLogin,
     reroute,
-    instagramGetToken,
-    instagramGetUserInfo, setPreloadDone
 } from "../../redux/actions/app";
 import './auth-page.scss';
 import {AUTH_TYPE, ROUTES, ACCOUNT_TYPE} from "../../utils/enums";
@@ -34,8 +32,6 @@ function AuthPage({type}) {
     useEffect(() => {
         const code = queryParams.get("code");
         let successCallback = () => {};
-        dispatch(setPreloadDone(false));
-        const setDone = () => dispatch(setPreloadDone(true));
         switch(type) {
             case ACCOUNT_TYPE.GOOGLE:
                 successCallback = () => {
@@ -45,16 +41,14 @@ function AuthPage({type}) {
                                 dispatch(reroute(ROUTES.REGISTER));
                             };
                             return dispatch(register({ // 3a) Register Google Account
-                                type, failureCallback,
-                                successCallback: setDone
+                                type, failureCallback
                             }));
                         }
                         const failureCallback = () => {
                             dispatch(reroute(ROUTES.LOGIN));
                         };
                         return dispatch(localLogin({
-                            type, failureCallback,
-                            successCallback: setDone
+                            type, failureCallback
                         })); // 3b) Login Google Account
                     }));
                 };
@@ -67,7 +61,7 @@ function AuthPage({type}) {
 
     // COMPONENTS ------------------------------------------------------------------------------------------------------
 
-    return null;
+    return (<CircularProgress color="primary" className={"spinner"}/>);
 }
 
 export default AuthPage;
