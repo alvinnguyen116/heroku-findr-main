@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {Switch, useHistory, Route, useLocation} from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Backdrop from '../backdrop/Backdrop';
 import FindPage from "../../pages/find-page/FindPage";
 import LoginPage from "../../pages/login-page/login-page";
 import NextStepsPage from "../../pages/next-steps-page/NextStepsPage";
@@ -119,9 +120,9 @@ function App({appState, profileState, dispatch}) {
     const renderBackdropElement = () => {
         if (backdropElement) {
             return (
-                <div className={"backdrop"} onClick={onClick(setBackdrop)}>
+                <Backdrop onClick={onClick(setBackdrop)}>
                     {backdropElement}
-                </div>
+                </Backdrop>
             );
         }
         return null;
@@ -130,9 +131,9 @@ function App({appState, profileState, dispatch}) {
     const renderBackdropElement2 = () => {
         if (backdropElement2) {
             return (
-                <div className={"backdrop two"} onClick={onClick(setBackdrop2)}>
+                <Backdrop className={"two"} onClick={onClick(setBackdrop2)}>
                     {backdropElement2}
-                </div>
+                </Backdrop>
             );
         }
         return null;
