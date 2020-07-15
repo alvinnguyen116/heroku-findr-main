@@ -12,6 +12,7 @@
   background-color: white;
   z-index: 1;
   border-radius: 0 !important;
+  --img-len: 35px;
 
   .image-icon{
     height: var(--img-len);
@@ -88,7 +89,6 @@
   }
 
   .main-button {
-    --img-len: 35px;
     padding: 4px;
 
 
