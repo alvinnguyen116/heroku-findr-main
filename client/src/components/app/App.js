@@ -41,7 +41,6 @@ function App({appState, profileState, dispatch}) {
     // CONSTANTS -------------------------------------------------------------------------------------------------------
 
     const {snackbar, route, accessToken, backdropElement, backdropElement2, preloadDone} = appState;
-    const profileCompleted = !isEmptyProfile(profileState);
     const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true";
     const location = useLocation();
 
@@ -62,7 +61,7 @@ function App({appState, profileState, dispatch}) {
         }
     }, []);
 
-    // useEffect(() => { tends to be flakey
+    // useEffect(() => {
     //     if (accessToken && preloadDone && !profileCompleted) {
     //         dispatch(reroute(ROUTES.NEXT_STEPS));
     //     }

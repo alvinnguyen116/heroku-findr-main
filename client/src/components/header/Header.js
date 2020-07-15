@@ -114,14 +114,14 @@ function Header({appState, profileState, dispatch}) {
     };
 
     const renderRightMostButton = () => {
-        if (loggedIn && profileCompleted) {
+        if (loggedIn) {
             return (
                 <div
                     className={`main-button button ${showMenu ? 'hover' : ''}`}
                     onClick={() => setShowMenu(!showMenu)}
                     ref={buttonRef}>
-                    <img src={croppedURL} alt={'User Profile'} className={"image-icon"}/>
-                    <span className={"name"}>{`${name.first} ${name.last[0]}.`}</span>
+                    {croppedURL ? <img src={croppedURL} alt={'User Profile'} className={"image-icon"}/> : null}
+                    <span className={"name"}>{`${name.first ? name.first : 'Test'} ${name.last ? name.last : 'Account'}`}</span>
                     <CSSTransition in={showMenu} timeout={100} mountOnEnter unmountOnExit classNames={"menu"}>
                         <Paper elevation={8} className={"menu-option"}>
                             <div className={"option"} onClick={viewProfile}>
@@ -142,34 +142,7 @@ function Header({appState, profileState, dispatch}) {
         );
     };
 
-    const renderRight = () => {
-        if (loggedIn && !profileCompleted) return null;
-        return (
-            <>
-                <div className={"home"} onClick={aboutPage}>
-                    What is {APP_NAME}?
-                </div>
-                {renderRightMostButton()}
-            </>
-        );
-    };
-
     if (dontShow) return null;
-
-    const renderContent = () => {
-        if (preloadDone) {
-            return (
-                <>
-                    <div className={"left"}>
-                        <Icon className={'icon'} onClick={findPage}/>
-                        <Search {...searchProps}/>
-                    </div>
-                    {renderRight()}
-                </>
-            );
-        }
-        return null;
-    };
 
     return (
         <div className={"header fade-effect"}>
@@ -177,7 +150,10 @@ function Header({appState, profileState, dispatch}) {
                 <Icon className={'icon'} onClick={findPage}/>
                 <Search {...searchProps}/>
             </div>
-            {renderRight()}
+            <div className={"home"} onClick={aboutPage}>
+                What is {APP_NAME}?
+            </div>
+            {renderRightMostButton()}
         </div>
     );
 }

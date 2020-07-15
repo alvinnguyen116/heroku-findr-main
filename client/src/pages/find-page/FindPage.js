@@ -31,8 +31,6 @@ function FindPage({appState, profileState, dispatch}) {
         const score = averageTagsScore(profile.tags, searchTag);
         return {...profile, score};
     }).sort((a,b) => b.score - a.score);
-    const loggedIn = getCookie(COOKIE.LOGGED_IN) === "true";
-    const profileCompleted = !isEmptyProfile(profileState);
 
     // COMPONENT STATE -------------------------------------------------------------------------------------------------
 
@@ -136,7 +134,7 @@ function FindPage({appState, profileState, dispatch}) {
         );
     };
 
-    if (preloadDone && ((loggedIn && profileCompleted) || !loggedIn) && !inProgress) {
+    if (preloadDone && !inProgress) {
         if (currentIndex < sortedProfiles.length && sortedProfiles[currentIndex]) {
             return (
                 <div className={"find-page"}>
