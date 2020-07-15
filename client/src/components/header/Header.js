@@ -114,6 +114,7 @@ function Header({appState, profileState, dispatch}) {
     };
 
     const renderRightMostButton = () => {
+        if (!preloadDone) return null;
         if (loggedIn) {
             return (
                 <div
@@ -121,7 +122,7 @@ function Header({appState, profileState, dispatch}) {
                     onClick={() => setShowMenu(!showMenu)}
                     ref={buttonRef}>
                     {croppedURL ? <img src={croppedURL} alt={'User Profile'} className={"image-icon"}/> : null}
-                    <span className={"name"}>{`${name.first ? name.first : 'Test'} ${name.last ? name.last : 'Account'}`}</span>
+                    <span className={"name"}>{`${name.first ? name.first : 'N/A'} ${name.last ? name.last : ''}`}</span>
                     <CSSTransition in={showMenu} timeout={100} mountOnEnter unmountOnExit classNames={"menu"}>
                         <Paper elevation={8} className={"menu-option"}>
                             <div className={"option"} onClick={viewProfile}>
@@ -136,7 +137,7 @@ function Header({appState, profileState, dispatch}) {
             );
         }
         return (
-            <div className={"login"} onClick={isLoginPage ? registerPage : loginPage}>
+            <div className={"login main-button button"} onClick={isLoginPage ? registerPage : loginPage}>
                 {isLoginPage ? 'Register' : 'Login'}
             </div>
         );

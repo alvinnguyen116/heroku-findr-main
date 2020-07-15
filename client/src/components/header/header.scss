@@ -10,16 +10,9 @@
   height: var(--header-height);
   box-sizing: border-box;
   background-color: white;
+  justify-content: space-between;
   z-index: 1;
   border-radius: 0 !important;
-  --img-len: 35px;
-
-  .image-icon{
-    height: var(--img-len);
-    width: var(--img-len);
-    border-radius: 4px;
-    object-fit: contain;
-  }
 
   .home, .login {
     font-weight: 100;
@@ -89,8 +82,15 @@
   }
 
   .main-button {
+    --img-len: 35px;
     padding: 4px;
 
+    .image-icon{
+      height: var(--img-len);
+      width: var(--img-len);
+      border-radius: 4px;
+      object-fit: contain;
+    }
 
     .name {
       margin: 0 .5em;
